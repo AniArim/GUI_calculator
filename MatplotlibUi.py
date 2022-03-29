@@ -230,6 +230,7 @@ class Ui_MatplotlibWindow(object):
         QtCore.QMetaObject.connectSlotsByName(MatplotlibWindow)
 
         self.add_functions()
+        print("SetupUi")
 
     def retranslateUi(self, MatplotlibWindow):
         _translate = QtCore.QCoreApplication.translate

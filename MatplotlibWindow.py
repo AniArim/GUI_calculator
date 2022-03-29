@@ -14,13 +14,15 @@ from matplotlib.ticker import FixedLocator
 
 
 class MatplotlibWidget(QtWidgets.QWidget):
+
     def __init__(self, parent=None):
         super(MatplotlibWidget, self).__init__(parent)
+        pyplot.close()
         print("pyplot.get_fignums", pyplot.get_fignums())
         self.figure_draw = pyplot.gcf()
         print("self.figure_draw", self.figure_draw)
+        #self.figure_draw.clear()  # очистка фигуры от элементов прошлого рисунка при повторном вызове.
         print("pyplot.get_fignums2", pyplot.get_fignums())
-        self.figure_draw.clear()  # очистка фигуры от элементов прошлого рисунка при повторном вызове.
         self.figure_draw.set_facecolor("#e3e3e3")
         self.canvas = FigureCanvasQTAgg(self.figure_draw)
         self.axes = self.figure_draw.add_subplot(111)
