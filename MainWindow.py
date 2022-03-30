@@ -139,28 +139,29 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         :return:  None
         """
 
-        if self.Box_whatsearch.currentIndex() == 0:  # Если "Что ищем?", тогда текст сбрасывается
+        if self.Box_whatsearch.currentIndex() == RectangleWhatsearchVariant.whatsearch.value:  # Если "Что ищем?", тогда текст сбрасывается
             self.groupBox_pageInput.setEnabled(False)  # Выключаем кликабельность бокса для ввода параметров
             # Очищаем поля с параметрами поиска и ввода пользователя
             self.clear_lines(self.page1_lines)
             
-        if self.figure == self.figure_list[0][0]:  # Прямоугольник
-            if self.Box_whatsearch.currentIndex() != 0:
+        if self.figure == "Прямоугольник":
+            if self.Box_whatsearch.currentIndex() != RectangleWhatsearchVariant.whatsearch.value:
                 self.clear_lines(self.page1_lines)
                 self.groupBox_pageInput.setEnabled(True)  # включаем бокс для ввода данных
-                for i in self.page1_lines[1]:  # кликабельность полей для ввода данных
-                    i.setEnabled(True)
+                for current_line in self.page1_lines[1]:  # кликабельность полей для ввода данных
+                    current_line.setEnabled(True)
                 
-                j = 0
-                for i in self.page1_lines[0]:  # установка стандартного текста для полей наименований параметров для поиска
-                    i.setText(self._translate("MainWindow", self.input_data.get(self.figure)[j]))
-                    j += 1
+                index = 0
+                for current_line in self.page1_lines[0]:  # установка стандартного текста для полей наименований параметров для поиска
+                    current_line.setText(self._translate("MainWindow", self.input_data.get(self.figure)[index]))
+                    index += 1
+
                 # Изменение текста и видимости в полях в зависимости от того, что ищем
-                if self.Box_whatsearch.currentIndex() == 2:
+                if self.Box_whatsearch.currentIndex() == RectangleWhatsearchVariant.diagonal.value:
                     self.lineEdit_page1_line1.setText("Сторона a")
                     self.lineEdit_page1_line2.setText("Сторона b")
                     self.lineEdit_page1_line3.setText("Радиус")
-                elif self.Box_whatsearch.currentIndex() == 3:
+                elif self.Box_whatsearch.currentIndex() == RectangleWhatsearchVariant.perimeter.value:
                     self.lineEdit_page1_line1.setText("Сторона a")
                     self.lineEdit_page1_line2.setText("Сторона b")
                     self.lineEdit_page1_line3.setText("Диагональ")
@@ -169,17 +170,17 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     self.lineEdit_page1_line6_input.setEnabled(False)
                     self.lineEdit_page1_line7.setText("")
                     self.lineEdit_page1_line7_input.setEnabled(False)
-                elif self.Box_whatsearch.currentIndex() == 4:
+                elif self.Box_whatsearch.currentIndex() == RectangleWhatsearchVariant.square.value:
                     self.lineEdit_page1_line1.setText("Сторона a")
                     self.lineEdit_page1_line2.setText("Сторона b")
                     self.lineEdit_page1_line4.setText("Радиус")
                     self.lineEdit_page1_line6.setText("Угол β")
                     self.lineEdit_page1_line7.setText("")
                     self.lineEdit_page1_line7_input.setEnabled(False)
-                elif self.Box_whatsearch.currentIndex() == 5:
+                elif self.Box_whatsearch.currentIndex() == RectangleWhatsearchVariant.radius.value:
                     self.lineEdit_page1_line1.setText("Сторона a")
                     self.lineEdit_page1_line2.setText("Сторона b")
-                elif self.Box_whatsearch.currentIndex() == 6:
+                elif self.Box_whatsearch.currentIndex() == RectangleWhatsearchVariant.angleA.value:
                     self.lineEdit_page1_line1.setText("Сторона a")
                     self.lineEdit_page1_line2.setText("Сторона b")
                     self.lineEdit_page1_line4.setText("Угол β")
@@ -189,7 +190,7 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     self.lineEdit_page1_line6.setText("")
                     self.lineEdit_page1_line7_input.setEnabled(False)
                     self.lineEdit_page1_line7.setText("")
-                elif self.Box_whatsearch.currentIndex() == 7:
+                elif self.Box_whatsearch.currentIndex() == RectangleWhatsearchVariant.angleB.value:
                     self.lineEdit_page1_line1.setText("Площадь")
                     self.lineEdit_page1_line2.setText("Диагональ")
                     self.lineEdit_page1_line3.setText("Угол α")
