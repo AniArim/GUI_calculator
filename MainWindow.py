@@ -34,12 +34,6 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
              "Треугольник", "Шестиугольник", "Окружность"),
             ("Призма", "Параллелепипед", "Куб", "Пирамида", "Цилиндр круговой", "Конус круговой", "Шар, сфера")
         )
-        # Словарь что возможно вычислить для различных фигур эквивалентно Enum
-        self.whatsearch_variants = {
-            "Прямоугольник": (
-                "Что нужно найти?", "Стороны", "Диагональ", "Периметр", "Площадь", "Окружность описанная вокруг",
-                "Угол между стороной и диагональю", "Угол между диагоналями")
-        }
 
         # Словарь рассчетов для разных фигур
         self.output_data = {
@@ -270,17 +264,14 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         :return: None
         """
         if figure == "Прямоугольник":
-            titles = self.whatsearch_variants.get(figure)
-            #self.Box_whatsearch.clear()
 
-            for index in range(8):
-                self.Box_whatsearch.addItem(f"{titles[index]}")
-                self.Box_whatsearch.setItemText(index, self._translate("MainWindow", titles[index]))
+            for id, element in enumerate(RectangleWhatsearchVariant):
+                addItem = str(element).partition(".")[-1]
+                self.Box_whatsearch.addItem(addItem)
+                self.Box_whatsearch.setItemText(id, self._translate("MainWindow", element.name))
 
         else:
-            print("self.Box_whatsearch.index", self.Box_whatsearch.currentIndex())
             self.Box_whatsearch.clear()
-            print("self.Box_whatsearch.index 2", self.Box_whatsearch.currentIndex())
             self.Box_whatsearch.addItem(f"{RectangleWhatsearchVariant.whatsearch.name}")
             self.Box_whatsearch.setItemText(0, self._translate("MainWindow", "Что нужно найти?"))
 

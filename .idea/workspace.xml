@@ -77,7 +77,7 @@
       <workItem from="1648380461133" duration="50365000" />
       <workItem from="1648545456650" duration="11287000" />
       <workItem from="1648582060306" duration="12456000" />
-      <workItem from="1648661998548" duration="3438000" />
+      <workItem from="1648661998548" duration="4599000" />
     </task>
     <servers />
   </component>
@@ -97,6 +97,16 @@
           <line>197</line>
           <option name="timeStamp" value="2" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/MainWindow.py</url>
+          <line>281</line>
+          <option name="timeStamp" value="14" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/MainWindow.py</url>
+          <line>278</line>
+          <option name="timeStamp" value="15" />
+        </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
         <breakpoint type="python-exception">
@@ -108,6 +118,6 @@
     </breakpoint-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/GUI_calculator$main.coverage" NAME="main Coverage Results" MODIFIED="1648665404258" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/GUI_calculator$main.coverage" NAME="main Coverage Results" MODIFIED="1648666634408" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>
