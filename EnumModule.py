@@ -2,7 +2,7 @@ import enum
 
 
 class RectangleWhatsearchVariant(enum.IntEnum):
-    whatsearch = 0  # "Что нужно найти?
+    whatsearch = 0  # "Что нужно найти?"
     sides = 1  # "Стороны"
     diagonal = 2  # "Диагональ"
     perimeter = 3  # "Периметр"
@@ -13,6 +13,22 @@ class RectangleWhatsearchVariant(enum.IntEnum):
 
     def __init__(self, *args):
         pass
+
+    @staticmethod
+    def names():
+        return (
+            "Что нужно найти?",
+            "Стороны",
+            "Диагональ",
+            "Периметр",
+            "Площадь",
+            "Окружность описанная вокруг",
+            "Угол между стороной и диагональю 'a'",
+            "Угол между диагоналями 'β'"
+        )
+    @property
+    def name(self):
+        return self.names()[self.value]
 
 
 class RectangleParentFormulas(enum.Enum):

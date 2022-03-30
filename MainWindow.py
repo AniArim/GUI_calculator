@@ -1,12 +1,13 @@
 
-from Figure_2D import Rectangle
-from MatplotlibWindow import PlotWindow
-from EnumModule import *
-from MainWindowUi import Ui_MainWindow
-from ErrorWindow import ErrorDialog
-
 from pathlib import Path
+
 from PyQt5 import QtGui, QtWidgets
+
+from EnumModule import *
+from ErrorWindow import ErrorDialog
+from Figure_2D import Rectangle
+from MainWindowUi import Ui_MainWindow
+from MatplotlibWindow import PlotWindow
 
 
 class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
@@ -33,7 +34,7 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
              "Треугольник", "Шестиугольник", "Окружность"),
             ("Призма", "Параллелепипед", "Куб", "Пирамида", "Цилиндр круговой", "Конус круговой", "Шар, сфера")
         )
-        # Словарь что возможно вычислить для различных фигур
+        # Словарь что возможно вычислить для различных фигур эквивалентно Enum
         self.whatsearch_variants = {
             "Прямоугольник": (
                 "Что нужно найти?", "Стороны", "Диагональ", "Периметр", "Площадь", "Окружность описанная вокруг",
@@ -64,8 +65,32 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 RectangleWhatsearchVariant.radius.value: ("Сторона a", "Сторона b", "Диагональ", "Площадь", "Периметр", "Угол α", "Угол β"),
                 RectangleWhatsearchVariant.angleA.value: ("Сторона a", "Сторона b", "Диагональ", "Угол β"),
                 RectangleWhatsearchVariant.angleB.value: ("Площадь", "Диагональ", "Угол α")
-                            }
-            }
+                            },
+            "Параллелограмм": {
+                0: ""
+                               },
+            "Квадрат": {
+                0: ""
+                        },
+            "Ромб": {
+                0: ""
+                    },
+            "Трапеция равнобедренная": {
+                0: ""
+                    },
+            "Трапеция прямоугольная": {
+                0: ""
+                    },
+            "Треугольник": {
+                0: ""
+                    },
+            "Шестиугольник": {
+                0: ""
+                    },
+            "Окружность": {
+                0: ""
+                    }
+        }
 
 
     def add_functions(self):
@@ -143,8 +168,9 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 for i in args:
                     i.setText(self._translate("MainWindow", ""))
 
-    def setText_setVisibility_to_page1_lines(self, enum_key: enum.Enum):
+    def setText_setVisibility_to_page1_lines(self, enum_key: int):
         index = 0
+        print(enum_key)
         titles = self.titles_for_parameters_in_lines_page1.get(self.figure).get(enum_key)
 
         for title in titles:
@@ -182,14 +208,6 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.clear_lines(self.page1_lines)
                 self.groupBox_pageInput.setEnabled(True)  # включаем бокс для ввода данных
 
-                '''for current_line in self.page1_lines[1]:  # кликабельность полей для ввода данных
-                    current_line.setEnabled(True)'''
-                
-                '''index = 0
-                for current_line in self.page1_lines[0]:  # установка стандартного текста для полей наименований параметров для поиска
-                    current_line.setText(self._translate("MainWindow", ""))
-                    index += 1'''
-
                 # Изменение текста в полях и видимости полей в зависимости от того, что ищем
                 if self.Box_whatsearch.currentIndex() == RectangleWhatsearchVariant.sides.value:
                     self.setText_setVisibility_to_page1_lines(RectangleWhatsearchVariant.sides.value)
@@ -211,8 +229,10 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
                 elif self.Box_whatsearch.currentIndex() == RectangleWhatsearchVariant.angleB.value:
                     self.setText_setVisibility_to_page1_lines(RectangleWhatsearchVariant.angleB.value)
-                    
-    def updateQComboBoxFigure(self, box_object, tuple_of_box_items):
+            else:
+                pass
+
+    def updateQComboBoxFigure(self, box_object: QtWidgets.QComboBox, tuple_of_box_items: tuple):
         """
         На странице Input и Output выводим значение фигуры, с которой будем работать, в зависимости от того, что выберет
         user.
@@ -227,8 +247,13 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         """
         self.plainTextEdit_figure_input.setPlainText(box_object.currentText())
         self.plainTextEdit_figure_output.setPlainText(box_object.currentText())
+
+        self.figure = self.plainTextEdit_figure_input.toPlainText() or None # фигура с которой будем работать
+        self.data_figure_values_input = {self.figure: {}}  # Создаем словарь в котором обновляем данные после ввода
+        # пользователем в lines_got_text(self, text, line)
         
         if box_object.currentIndex() == 0:
+            #self.figure = None
             self.Box_formulas.setEnabled(False)
             self.Box_whatsearch.setCurrentText("Что нужно найти?")
             self.label_image.clear()
@@ -239,19 +264,34 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.func_figure(box_object.currentText())
             self.update_image(self.plainTextEdit_figure_input.toPlainText())
             
-            self.figure = self.plainTextEdit_figure_input.toPlainText()  # фигура с которой будем работать
-            self.data_figure_values_input = {self.figure: {}}  # Создаем словарь в котором обновляем данные после ввода
-            # пользователем в lines_got_text(self, text, line)
+
+
             
             self.html = ""
             self.add_html_text(tuple_of_box_items[box_object.currentIndex()])  # берем название файла
             # из списка Figure_2D_box_items по текущему индексу Figure_3D_box
 
     def func_figure(self, figure):
-        if figure == self.figure_list[0][0]:
-            # Отображаем варианты для поиска. для выбранной фигуры. figure == self.figure
-            for i in range(8):
-                self.Box_whatsearch.setItemText(i, self._translate("MainWindow", self.whatsearch_variants.get(figure)[i]))
+        """
+        If figure >> object Box_whatsearch adding Item from self.whatsearch_variants.
+        If not figure >> object Box_whatsearch clearing themself (delete all Items), adding title
+        :param figure: self.figure
+        :return: None
+        """
+        if figure == "Прямоугольник":
+            titles = self.whatsearch_variants.get(figure)
+            #self.Box_whatsearch.clear()
+
+            for index in range(8):
+                self.Box_whatsearch.addItem(f"{titles[index]}")
+                self.Box_whatsearch.setItemText(index, self._translate("MainWindow", titles[index]))
+
+        else:
+            print("self.Box_whatsearch.index", self.Box_whatsearch.currentIndex())
+            self.Box_whatsearch.clear()
+            print("self.Box_whatsearch.index 2", self.Box_whatsearch.currentIndex())
+            self.Box_whatsearch.addItem(f"{RectangleWhatsearchVariant.whatsearch.name}")
+            self.Box_whatsearch.setItemText(0, self._translate("MainWindow", "Что нужно найти?"))
 
     def lines_got_text(self, text, line):
         """

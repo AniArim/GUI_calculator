@@ -12,6 +12,8 @@ from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.QtCore import QLocale, Qt
 from PyQt5.QtGui import QDoubleValidator
 
+from EnumModule import RectangleWhatsearchVariant
+
 class Ui_MainWindow(object):
 
     def __init__(self):
@@ -364,14 +366,7 @@ class Ui_MainWindow(object):
         self.Box_whatsearch.setFont(self.font_Cosmic)
         self.Box_whatsearch.setStyleSheet(self.StyleSheet_dark)
         self.Box_whatsearch.setObjectName("Box_whatsearch")
-        self.Box_whatsearch.addItem("")
-        self.Box_whatsearch.addItem("")
-        self.Box_whatsearch.addItem("")
-        self.Box_whatsearch.addItem("")
-        self.Box_whatsearch.addItem("")
-        self.Box_whatsearch.addItem("")
-        self.Box_whatsearch.addItem("")
-        self.Box_whatsearch.addItem("")
+        self.Box_whatsearch.addItem(f"{RectangleWhatsearchVariant.whatsearch.name}")
 
         self.plainTextEdit_figure_input = QtWidgets.QPlainTextEdit(self.Input)
         self.plainTextEdit_figure_input.setEnabled(False)
@@ -720,6 +715,8 @@ class Ui_MainWindow(object):
         self.Figure_3D_box.setItemText(5, self._translate("MainWindow", "Цилиндр круговой"))
         self.Figure_3D_box.setItemText(6, self._translate("MainWindow", "Конус круговой"))
         self.Figure_3D_box.setItemText(7, self._translate("MainWindow", "Шар, сфера"))
+
+        #self.Box_whatsearch.setItemText(0, self._translate("MainWindow", "Что нужно найти?"))
 
         for id, current_line in enumerate(self.page1_lines[0]):  # установка текста для полей наименований параметров для поиска
             equal_line_input = self.page1_lines[1][id]
