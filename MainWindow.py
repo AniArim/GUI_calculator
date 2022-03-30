@@ -14,6 +14,7 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def __init__(self, parent=None):
         super(RootWindow, self).__init__(parent)
+
         self.setWindowIcon(QtGui.QIcon(f"{Path.cwd() / 'images' / 'icon.png'}"))
 
         self.html = ""
@@ -28,20 +29,6 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                          "Пирамида": "pyramid.png",
                          "Цилиндр круговой": "cylinder.png", "Конус круговой": "cone.png", "Шар, сфера": "sphere.png"}
 
-        # Словарь плоских и объемных фигур
-        self.figure_list = (
-            ("Прямоугольник", "Параллелограмм", "Квадрат", "Ромб", "Трапеция равнобедренная", "Трапеция прямоугольная",
-             "Треугольник", "Шестиугольник", "Окружность"),
-            ("Призма", "Параллелепипед", "Куб", "Пирамида", "Цилиндр круговой", "Конус круговой", "Шар, сфера")
-        )
-
-        # Словарь рассчетов для разных фигур
-        self.output_data = {
-            "Прямоугольник": ("Диагональ", "Сторона a", "Угол α", "Площадь", "Угол β", "Периметр",
-                              "Сторона  b", "Радиус")
-        }
-
-        #
         self.titles_for_parameters_in_lines_page1 = {
             "Прямоугольник": {
                 RectangleWhatsearchVariant.whatsearch.value: "",
@@ -76,7 +63,28 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     },
             "Окружность": {
                 0: ""
-                    }
+                    },
+            "Призма": {
+                0: ""
+                    },
+            "Параллелепипед": {
+                0: ""
+                            },
+            "Куб": {
+                0: ""
+                    },
+            "Пирамида": {
+                0: ""
+                        },
+            "Цилиндр круговой": {
+                0: ""
+                                },
+            "Конус круговой": {
+                0: ""
+                                },
+            "Шар, сфера": {
+                0: ""
+                            }
         }
 
 
