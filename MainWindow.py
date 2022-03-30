@@ -58,6 +58,19 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         # Список Figure_3D_box.Items
         self.Figure_3D_box_items = ("figure_3D", "prism", "parallelepiped", "cube", "pyramid", "cylinder", "cone",
                                     "sphere")
+        #
+        self.titles_for_parameters_in_lines_page1 = {
+            "Прямоугольник": {
+                RectangleWhatsearchVariant.whatsearch.value: "Что нужно найти?",
+                RectangleWhatsearchVariant.sides.value: ("Сторона", "Диаметр", "Диагональ", "Площадь", "Периметр", "Угол α", "Угол β"),
+                RectangleWhatsearchVariant.diagonal.value: ("Сторона a", "Сторона b", "Радиус", "Площадь", "Периметр", "Угол α", "Угол β"),
+                RectangleWhatsearchVariant.perimeter.value: ("Сторона a", "Сторона b", "Диагональ", "Площадь", "Периметр", "Радиус"),
+                RectangleWhatsearchVariant.square.value: ("Сторона a", "Сторона b", "Диагональ", "Радиус", "Периметр", "Угол β"),
+                RectangleWhatsearchVariant.radius.value: ("Сторона a", "Сторона b", "Диагональ", "Площадь", "Периметр", "Угол α", "Угол β"),
+                RectangleWhatsearchVariant.angleA.value: ("Сторона a", "Сторона b", "Диагональ", "Угол β"),
+                RectangleWhatsearchVariant.angleB.value: ("Площадь", "Диагональ", "Угол α")
+                            }
+            }
     
     def add_functions(self):
         self.switch_left.clicked.connect(lambda: self.switched(self.switch_left.text()))
@@ -132,7 +145,28 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             else:
                 for i in args:
                     i.setText(self._translate("MainWindow", ""))
-    
+
+    def setText_setVisibility_to_page1_lines(self, enum_key: enum.Enum):
+        index = 0
+        titles = self.titles_for_parameters_in_lines_page1.get(self.figure).get(enum_key)
+
+        for title in titles:
+            self.page1_lines[0][index].setText(title)
+            index += 1
+
+        for index, line in enumerate(self.page1_lines[0]):
+            equal_line_input = self.page1_lines[0][index]
+
+            if not line.text():
+                line.setEnabled(False)
+                line.setHidden(True)
+                equal_line_input.setEnabled(False)
+                equal_line_input.setHidden(True)
+            else:
+                line.setHidden(False)
+                equal_line_input.setEnabled(True)
+                equal_line_input.setHidden(False)
+
     def box_whatsearch_clicked(self):
         """
         Обработка событий в поле "Что ищем?"
@@ -156,7 +190,7 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     current_line.setText(self._translate("MainWindow", self.input_data.get(self.figure)[index]))
                     index += 1
 
-                # Изменение текста и видимости в полях в зависимости от того, что ищем
+                # Изменение текста в полях и видимости полей в зависимости от того, что ищем
                 if self.Box_whatsearch.currentIndex() == RectangleWhatsearchVariant.diagonal.value:
                     self.lineEdit_page1_line1.setText("Сторона a")
                     self.lineEdit_page1_line2.setText("Сторона b")
