@@ -47,13 +47,6 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                               "Сторона  b", "Радиус")
         }
 
-        # Список Figure_2D_box.Items
-        self.Figure_2D_box_items = ("figure_2D", "rectangle", "parallelogram", "square", "rhombus", "trapezoid_1",
-                                    "trapezoid_2", "triangle", "hexagon", "circle")
-
-        # Список Figure_3D_box.Items
-        self.Figure_3D_box_items = ("figure_3D", "prism", "parallelepiped", "cube", "pyramid", "cylinder", "cone",
-                                    "sphere")
         #
         self.titles_for_parameters_in_lines_page1 = {
             "Прямоугольник": {
@@ -98,8 +91,8 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.switch_left.clicked.connect(lambda: self.switched(self.switch_left.text()))
         self.switch_right.clicked.connect(lambda: self.switched(self.switch_right.text()))
         
-        self.Figure_2D_box.currentIndexChanged.connect(lambda: self.updateQComboBoxFigure(self.Figure_2D_box, self.Figure_2D_box_items))
-        self.Figure_3D_box.currentIndexChanged.connect(lambda: self.updateQComboBoxFigure(self.Figure_3D_box, self.Figure_3D_box_items))
+        self.Figure_2D_box.currentIndexChanged.connect(lambda: self.updateQComboBoxFigure(self.Figure_2D_box))
+        self.Figure_3D_box.currentIndexChanged.connect(lambda: self.updateQComboBoxFigure(self.Figure_3D_box))
         
         self.Box_whatsearch.currentIndexChanged.connect(self.box_whatsearch_clicked)
         
@@ -232,7 +225,7 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             else:
                 pass
 
-    def updateQComboBoxFigure(self, box_object: QtWidgets.QComboBox, tuple_of_box_items: tuple):
+    def updateQComboBoxFigure(self, box_object: QtWidgets.QComboBox):
         """
         На странице Input и Output выводим значение фигуры, с которой будем работать, в зависимости от того, что выберет
         user.
@@ -248,28 +241,26 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.plainTextEdit_figure_input.setPlainText(box_object.currentText())
         self.plainTextEdit_figure_output.setPlainText(box_object.currentText())
 
-        self.figure = self.plainTextEdit_figure_input.toPlainText() or None # фигура с которой будем работать
+        self.figure = self.plainTextEdit_figure_input.toPlainText() or None  # фигура с которой будем работать
         self.data_figure_values_input = {self.figure: {}}  # Создаем словарь в котором обновляем данные после ввода
         # пользователем в lines_got_text(self, text, line)
+        self.html = ""
+        self.text_descriptions.setHtml(self._translate("MainWindow", f"{self.html}"))
         
         if box_object.currentIndex() == 0:
-            #self.figure = None
             self.Box_formulas.setEnabled(False)
             self.Box_whatsearch.setCurrentText("Что нужно найти?")
             self.label_image.clear()
             self.label_image.setMovie(self.gif)
+
         else:
             self.Box_formulas.setEnabled(True)
             self.groupBox_pageInput.setEnabled(False)
             self.func_figure(box_object.currentText())
             self.update_image(self.plainTextEdit_figure_input.toPlainText())
-            
 
-
-            
-            self.html = ""
-            self.add_html_text(tuple_of_box_items[box_object.currentIndex()])  # берем название файла
-            # из списка Figure_2D_box_items по текущему индексу Figure_3D_box
+            file_name = f'{self.png_data.get(self.figure).partition(".")[0]}'
+            self.add_html_text(file_name)
 
     def func_figure(self, figure):
         """
