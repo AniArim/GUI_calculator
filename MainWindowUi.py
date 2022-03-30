@@ -672,7 +672,7 @@ class Ui_MainWindow(object):
         self.Box_formulas.setTitle(self._translate("MainWindow", "Данные/ Результат/ Свойства"))
         self.Calculate.setText(self._translate("MainWindow", "Посчитать"))
 
-        self.text_label_input.setText(self._translate("MainWindow", "Вводные данные, которые известны:"))
+        self.text_label_input.setText(self._translate("MainWindow", "Выберите параметр для поиска."))
         self.Box_units.setCurrentText(self._translate("MainWindow", "мм"))
         self.Box_units.setItemText(0, self._translate("MainWindow", "мм"))
         self.Box_units.setItemText(1, self._translate("MainWindow", "см"))
@@ -720,6 +720,14 @@ class Ui_MainWindow(object):
         self.Figure_3D_box.setItemText(5, self._translate("MainWindow", "Цилиндр круговой"))
         self.Figure_3D_box.setItemText(6, self._translate("MainWindow", "Конус круговой"))
         self.Figure_3D_box.setItemText(7, self._translate("MainWindow", "Шар, сфера"))
+
+        for id, current_line in enumerate(self.page1_lines[0]):  # установка текста для полей наименований параметров для поиска
+            equal_line_input = self.page1_lines[1][id]
+
+            current_line.setText(self._translate("MainWindow", ""))
+            current_line.setHidden(True)
+            equal_line_input.setHidden(True)
+
 
         self.add_functions()
 

@@ -40,11 +40,6 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 "Угол между стороной и диагональю", "Угол между диагоналями")
         }
 
-        # Словарь вводных данных для рассчетов
-        self.input_data = {
-            "Прямоугольник": ("Сторона", "Диаметр", "Диагональ", "Площадь", "Периметр", "Угол α", "Угол β")
-        }
-
         # Словарь рассчетов для разных фигур
         self.output_data = {
             "Прямоугольник": ("Диагональ", "Сторона a", "Угол α", "Площадь", "Угол β", "Периметр",
@@ -61,7 +56,7 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         #
         self.titles_for_parameters_in_lines_page1 = {
             "Прямоугольник": {
-                RectangleWhatsearchVariant.whatsearch.value: "Что нужно найти?",
+                RectangleWhatsearchVariant.whatsearch.value: "",
                 RectangleWhatsearchVariant.sides.value: ("Сторона", "Диаметр", "Диагональ", "Площадь", "Периметр", "Угол α", "Угол β"),
                 RectangleWhatsearchVariant.diagonal.value: ("Сторона a", "Сторона b", "Радиус", "Площадь", "Периметр", "Угол α", "Угол β"),
                 RectangleWhatsearchVariant.perimeter.value: ("Сторона a", "Сторона b", "Диагональ", "Площадь", "Периметр", "Радиус"),
@@ -71,8 +66,10 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 RectangleWhatsearchVariant.angleB.value: ("Площадь", "Диагональ", "Угол α")
                             }
             }
-    
+
+
     def add_functions(self):
+
         self.switch_left.clicked.connect(lambda: self.switched(self.switch_left.text()))
         self.switch_right.clicked.connect(lambda: self.switched(self.switch_right.text()))
         
@@ -155,7 +152,7 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             index += 1
 
         for index, line in enumerate(self.page1_lines[0]):
-            equal_line_input = self.page1_lines[0][index]
+            equal_line_input = self.page1_lines[1][index]
 
             if not line.text():
                 line.setEnabled(False)
@@ -175,67 +172,45 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         if self.Box_whatsearch.currentIndex() == RectangleWhatsearchVariant.whatsearch.value:  # Если "Что ищем?", тогда текст сбрасывается
             self.groupBox_pageInput.setEnabled(False)  # Выключаем кликабельность бокса для ввода параметров
-            # Очищаем поля с параметрами поиска и ввода пользователя
-            self.clear_lines(self.page1_lines)
+            self.clear_lines(self.page1_lines)  # Очищаем поля с параметрами поиска и ввода пользователя
+            self.text_label_input.setText("Выберите параметр для поиска.")
+            self.setText_setVisibility_to_page1_lines(RectangleWhatsearchVariant.whatsearch.value)
             
         if self.figure == "Прямоугольник":
             if self.Box_whatsearch.currentIndex() != RectangleWhatsearchVariant.whatsearch.value:
+                self.text_label_input.setText("Вводные данные, которые известны:")
                 self.clear_lines(self.page1_lines)
                 self.groupBox_pageInput.setEnabled(True)  # включаем бокс для ввода данных
-                for current_line in self.page1_lines[1]:  # кликабельность полей для ввода данных
-                    current_line.setEnabled(True)
+
+                '''for current_line in self.page1_lines[1]:  # кликабельность полей для ввода данных
+                    current_line.setEnabled(True)'''
                 
-                index = 0
+                '''index = 0
                 for current_line in self.page1_lines[0]:  # установка стандартного текста для полей наименований параметров для поиска
-                    current_line.setText(self._translate("MainWindow", self.input_data.get(self.figure)[index]))
-                    index += 1
+                    current_line.setText(self._translate("MainWindow", ""))
+                    index += 1'''
 
                 # Изменение текста в полях и видимости полей в зависимости от того, что ищем
-                if self.Box_whatsearch.currentIndex() == RectangleWhatsearchVariant.diagonal.value:
-                    self.lineEdit_page1_line1.setText("Сторона a")
-                    self.lineEdit_page1_line2.setText("Сторона b")
-                    self.lineEdit_page1_line3.setText("Радиус")
+                if self.Box_whatsearch.currentIndex() == RectangleWhatsearchVariant.sides.value:
+                    self.setText_setVisibility_to_page1_lines(RectangleWhatsearchVariant.sides.value)
+
+                elif self.Box_whatsearch.currentIndex() == RectangleWhatsearchVariant.diagonal.value:
+                    self.setText_setVisibility_to_page1_lines(RectangleWhatsearchVariant.diagonal.value)
+
                 elif self.Box_whatsearch.currentIndex() == RectangleWhatsearchVariant.perimeter.value:
-                    self.lineEdit_page1_line1.setText("Сторона a")
-                    self.lineEdit_page1_line2.setText("Сторона b")
-                    self.lineEdit_page1_line3.setText("Диагональ")
-                    self.lineEdit_page1_line5.setText("Радиус")
-                    self.lineEdit_page1_line6.setText("")
-                    self.lineEdit_page1_line6_input.setEnabled(False)
-                    self.lineEdit_page1_line7.setText("")
-                    self.lineEdit_page1_line7_input.setEnabled(False)
+                    self.setText_setVisibility_to_page1_lines(RectangleWhatsearchVariant.perimeter.value)
+
                 elif self.Box_whatsearch.currentIndex() == RectangleWhatsearchVariant.square.value:
-                    self.lineEdit_page1_line1.setText("Сторона a")
-                    self.lineEdit_page1_line2.setText("Сторона b")
-                    self.lineEdit_page1_line4.setText("Радиус")
-                    self.lineEdit_page1_line6.setText("Угол β")
-                    self.lineEdit_page1_line7.setText("")
-                    self.lineEdit_page1_line7_input.setEnabled(False)
+                    self.setText_setVisibility_to_page1_lines(RectangleWhatsearchVariant.square.value)
+
                 elif self.Box_whatsearch.currentIndex() == RectangleWhatsearchVariant.radius.value:
-                    self.lineEdit_page1_line1.setText("Сторона a")
-                    self.lineEdit_page1_line2.setText("Сторона b")
+                    self.setText_setVisibility_to_page1_lines(RectangleWhatsearchVariant.radius.value)
+
                 elif self.Box_whatsearch.currentIndex() == RectangleWhatsearchVariant.angleA.value:
-                    self.lineEdit_page1_line1.setText("Сторона a")
-                    self.lineEdit_page1_line2.setText("Сторона b")
-                    self.lineEdit_page1_line4.setText("Угол β")
-                    self.lineEdit_page1_line5_input.setEnabled(False)
-                    self.lineEdit_page1_line5.setText("")
-                    self.lineEdit_page1_line6_input.setEnabled(False)
-                    self.lineEdit_page1_line6.setText("")
-                    self.lineEdit_page1_line7_input.setEnabled(False)
-                    self.lineEdit_page1_line7.setText("")
+                    self.setText_setVisibility_to_page1_lines(RectangleWhatsearchVariant.angleA.value)
+
                 elif self.Box_whatsearch.currentIndex() == RectangleWhatsearchVariant.angleB.value:
-                    self.lineEdit_page1_line1.setText("Площадь")
-                    self.lineEdit_page1_line2.setText("Диагональ")
-                    self.lineEdit_page1_line3.setText("Угол α")
-                    self.lineEdit_page1_line4_input.setEnabled(False)
-                    self.lineEdit_page1_line4.setText("")
-                    self.lineEdit_page1_line5_input.setEnabled(False)
-                    self.lineEdit_page1_line5.setText("")
-                    self.lineEdit_page1_line6_input.setEnabled(False)
-                    self.lineEdit_page1_line6.setText("")
-                    self.lineEdit_page1_line7_input.setEnabled(False)
-                    self.lineEdit_page1_line7.setText("")
+                    self.setText_setVisibility_to_page1_lines(RectangleWhatsearchVariant.angleB.value)
                     
     def updateQComboBoxFigure(self, box_object, tuple_of_box_items):
         """
