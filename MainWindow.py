@@ -20,7 +20,7 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.html = ""
 
         self.titles_for_parameters_in_lines_page1 = {
-            "Прямоугольник": {
+            FigureNames.rectangle.value: {
                 RectangleWhatsearchVariant.whatsearch.value: "",
                 RectangleWhatsearchVariant.sides.value: ("Сторона", "Диаметр", "Диагональ", "Площадь", "Периметр", "Угол α", "Угол β"),
                 RectangleWhatsearchVariant.diagonal.value: ("Сторона a", "Сторона b", "Радиус", "Площадь", "Периметр", "Угол α", "Угол β"),
@@ -30,49 +30,49 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 RectangleWhatsearchVariant.angleA.value: ("Сторона a", "Сторона b", "Диагональ", "Угол β"),
                 RectangleWhatsearchVariant.angleB.value: ("Площадь", "Диагональ", "Угол α")
                             },
-            "Параллелограмм": {
+            FigureNames.parallelogram.value: {
                 0: ""
                                },
-            "Квадрат": {
+            FigureNames.square.value: {
                 0: ""
                         },
-            "Ромб": {
+            FigureNames.rhombus.value: {
                 0: ""
                     },
-            "Трапеция равнобедренная": {
+            FigureNames.trapezium1.value: {
                 0: ""
                     },
-            "Трапеция прямоугольная": {
+            FigureNames.trapezium2.value: {
                 0: ""
                     },
-            "Треугольник": {
+            FigureNames.triangle.value: {
                 0: ""
                     },
-            "Шестиугольник": {
+            FigureNames.hexagon.value: {
                 0: ""
                     },
-            "Окружность": {
+            FigureNames.circle.value: {
                 0: ""
                     },
-            "Призма": {
+            FigureNames.prism.value: {
                 0: ""
                     },
-            "Параллелепипед": {
+            FigureNames.cuboid.value: {
                 0: ""
                             },
-            "Куб": {
+            FigureNames.cube.value: {
                 0: ""
                     },
-            "Пирамида": {
+            FigureNames.pyramid.value: {
                 0: ""
                         },
-            "Цилиндр круговой": {
+            FigureNames.cylinder.value: {
                 0: ""
                                 },
-            "Конус круговой": {
+            FigureNames.cone.value: {
                 0: ""
                                 },
-            "Шар, сфера": {
+            FigureNames.sphere.value: {
                 0: ""
                             }
         }
@@ -194,7 +194,7 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.clear_lines(self.page1_lines)
             self.groupBox_pageInput.setEnabled(True)  # включаем бокс для ввода данных
             
-            if self.figure == "Прямоугольник":
+            if self.figure == FigureNames.rectangle.value:
                 # Изменение текста в полях и видимости полей в зависимости от того, что ищем
                 if self.Box_whatsearch.currentIndex() == RectangleWhatsearchVariant.sides.value:
                     self.setText_setVisibility_to_page1_lines(RectangleWhatsearchVariant.sides.value)
@@ -263,7 +263,7 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         :param figure: self.figure
         :return: None
         """
-        if figure == "Прямоугольник":
+        if figure == FigureNames.rectangle.value:
 
             for id, element in enumerate(RectangleWhatsearchVariant):
                 addItem = repr(element._name_)
@@ -273,7 +273,7 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         else:
             self.Box_whatsearch.clear()
             self.Box_whatsearch.addItem(f"{RectangleWhatsearchVariant.whatsearch.name}")
-            self.Box_whatsearch.setItemText(0, self._translate("MainWindow", "Что нужно найти?"))
+            self.Box_whatsearch.setItemText(0, self._translate("MainWindow", RectangleWhatsearchVariant.whatsearch.name))
 
     def lines_got_text(self, text, line):
         """
@@ -366,9 +366,9 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                                         details="Тут могли бы быть функции...")
             else:
                 """Блок проверки """
-                if self.figure == "Прямоугольник":
+                if self.figure == FigureNames.rectangle.value:
                     if self.Box_whatsearch.currentIndex() == RectangleWhatsearchVariant.sides.value:
-                        self.lineEdit_page2_line1.setText("Сторона")
+                        self.lineEdit_page2_line1.setText(RectangleWhatsearchVariant.sides.name)
 
                         if self.check_page1_inputs_for_lines(1, 3):
                             self.page2_line1_placement(RectangleSidesFormulas.diagonalAndSide)
@@ -395,7 +395,7 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                             return
                             
                     elif self.Box_whatsearch.currentIndex() == RectangleWhatsearchVariant.diagonal.value:
-                        self.lineEdit_page2_line1.setText("Диагональ")
+                        self.lineEdit_page2_line1.setText(RectangleWhatsearchVariant.diagonal.name)
                         
                         if self.check_page1_inputs_for_lines(1, 2):
                             self.page2_line1_placement(RectangleDiagFormulas.pythagoras)
@@ -431,7 +431,7 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                             return
                         
                     elif self.Box_whatsearch.currentIndex() == RectangleWhatsearchVariant.perimeter.value:  # Периметр
-                        self.lineEdit_page2_line1.setText("Периметр")
+                        self.lineEdit_page2_line1.setText(RectangleWhatsearchVariant.perimeter.name)
 
                         if self.check_page1_inputs_for_lines(1, 2):
                             self.page2_line1_placement(RectanglePerimeterFormulas.sides)
@@ -455,7 +455,7 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                             return
                         
                     elif self.Box_whatsearch.currentIndex() == RectangleWhatsearchVariant.square.value:  # Площадь
-                        self.lineEdit_page2_line1.setText("Площадь")
+                        self.lineEdit_page2_line1.setText(RectangleWhatsearchVariant.square.name)
 
                         if self.check_page1_inputs_for_lines(1, 2):
                             self.page2_line1_placement(RectangleSquareFormulas.sides)
@@ -483,7 +483,7 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                             return
                             
                     elif self.Box_whatsearch.currentIndex() == RectangleWhatsearchVariant.radius.value:  # Окружность описанная вокруг
-                        self.lineEdit_page2_line1.setText("Радиус окружности")
+                        self.lineEdit_page2_line1.setText(RectangleWhatsearchVariant.radius.name)
 
                         if self.check_page1_inputs_for_lines(1, 2):
                             self.page2_line1_placement(RectangleRadiusFormulas.sides)
@@ -518,8 +518,8 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                                                                 "7. Синус острого угла между диагоналями и площадью прямоугольника\n")
                             return
                             
-                    elif self.Box_whatsearch.currentIndex() == RectangleAngleAFormulas.value:  # Угол между стороной и диагональю прямоугольника
-                        self.lineEdit_page2_line1.setText("Угол α")
+                    elif self.Box_whatsearch.currentIndex() == RectangleWhatsearchVariant.angleA.value:  # Угол между стороной и диагональю прямоугольника
+                        self.lineEdit_page2_line1.setText(RectangleWhatsearchVariant.angleA.name)
                         
                         if self.check_page1_input_for_line(3) and self.check_page1_inputs_for_line_or_line(1, 2):
                             self.page2_line1_placement(RectangleAngleAFormulas.diagonalAndSide)
@@ -534,8 +534,8 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                                                             "2. Угол между диагоналями\n")
                             return
                         
-                    elif self.Box_whatsearch.currentIndex() == RectangleAngleBFormulas.value:  # угол между диагоналями прямоугольника
-                        self.lineEdit_page2_line1.setText("Угол β")
+                    elif self.Box_whatsearch.currentIndex() == RectangleWhatsearchVariant.angleB.value:  # угол между диагоналями прямоугольника
+                        self.lineEdit_page2_line1.setText(RectangleWhatsearchVariant.angleB.name)
                         
                         if self.check_page1_input_for_line(3):
                             self.page2_line1_placement(RectangleAngleBFormulas.angleA)
@@ -570,7 +570,6 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         
     @staticmethod
     def error_message_show(text="", details=""):
-        #global ErrorDialog
     
         ui = ErrorDialog(text=text, details=details)
         print(ui)
@@ -582,8 +581,7 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     @staticmethod
     def show_matplotlib_window(fig):
-        #global PlotWindow  # класс объявляем глобальным чтобы окно не закрывалось сразу после открытия
-        # ToDo разобраться с фигурой по возможности уйти от глобал
+
         ui = PlotWindow(figure=fig)
         print(ui)
         ui.setupUi(ui)
