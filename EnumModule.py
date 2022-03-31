@@ -1,7 +1,35 @@
 import enum
 
+# ToDo было бы неплохо изменить переопределенный метод name на func, т.к. name
+#  по умолчанию возвращает приставку класса
 
-class RectangleWhatsearchVariant(enum.IntEnum):
+class FigureNames(enum.Enum):
+
+    rectangle = "Прямоугольник"
+    parallelogram = "Параллелограмм"
+    square = "Квадрат"
+    rhombus = "Ромб"
+    trapezium1 = "Трапеция равнобедренная"
+    trapezium2 = "Трапеция прямоугольная"
+    triangle = "Треугольник"
+    hexagon = "Шестиугольник"
+    circle = "Окружность"
+    prism = "Призма"
+    cuboid = "Параллелепипед"
+    cube = "Куб"
+    pyramid = "Пирамида"
+    cylinder = "Цилиндр круговой"
+    cone = "Конус круговой"
+    sphere = "Шар, сфера"
+
+    @classmethod
+    def keyForValue(cls, figure):
+        data = tuple(cls)
+        for object_ in data:
+            if object_.value == figure:
+                return object_
+
+class RectangleWhatsearchVariant(enum.Enum):
     whatsearch = 0  # "Что нужно найти?"
     sides = 1  # "Стороны"
     diagonal = 2  # "Диагональ"
@@ -26,6 +54,7 @@ class RectangleWhatsearchVariant(enum.IntEnum):
             "Угол между стороной и диагональю 'a'",
             "Угол между диагоналями 'β'"
         )
+
     @property
     def name(self):
         return self.names()[self.value]

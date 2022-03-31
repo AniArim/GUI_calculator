@@ -24,7 +24,7 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                          "Квадрат": "square.png",
                          "Ромб": "rhombus.png", "Трапеция равнобедренная": "trapezium1.png",
                          "Трапеция прямоугольная": "trapezium2.png",
-                         "Треугольник": "triangle.png", "Шестиугольник": "6-polygon.png", "Окружность": "circle.png",
+                         "Треугольник": "triangle.png", "Шестиугольник": "hexagon.png", "Окружность": "circle.png",
                          "Призма": "prism.png", "Параллелепипед": "cuboid.png", "Куб": "cube.png",
                          "Пирамида": "pyramid.png",
                          "Цилиндр круговой": "cylinder.png", "Конус круговой": "cone.png", "Шар, сфера": "sphere.png"}
@@ -87,7 +87,6 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                             }
         }
 
-
     def add_functions(self):
 
         self.switch_left.clicked.connect(lambda: self.switched(self.switch_left.text()))
@@ -113,7 +112,7 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         """
         Метод считывает разметку и текст из файла name.txt и добавляет в self.text_descriptions
         
-        :param name: название файла с разметкой HTML в директории text_HTML
+        :param name: название файла без расширения с разметкой HTML в директории text_HTML
         :return: None
         """
         path_file = Path.cwd()/'text_HTML'/f'{name}.txt'
@@ -164,8 +163,12 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     i.setText(self._translate("MainWindow", ""))
 
     def setText_setVisibility_to_page1_lines(self, enum_key: int):
+        """
+        TODO добавить описание
+        :param enum_key:
+        :return:
+        """
         index = 0
-        print(enum_key)
         titles = self.titles_for_parameters_in_lines_page1.get(self.figure).get(enum_key)
 
         for title in titles:
@@ -194,15 +197,14 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         if self.Box_whatsearch.currentIndex() == RectangleWhatsearchVariant.whatsearch.value:  # Если "Что ищем?", тогда текст сбрасывается
             self.groupBox_pageInput.setEnabled(False)  # Выключаем кликабельность бокса для ввода параметров
             self.clear_lines(self.page1_lines)  # Очищаем поля с параметрами поиска и ввода пользователя
-            self.text_label_input.setText("Выберите параметр для поиска.")
+            self.text_label_input.setText("Выберите параметр для поиска.")  # Устанавливаем дефолтное значение
             self.setText_setVisibility_to_page1_lines(RectangleWhatsearchVariant.whatsearch.value)
+        else:
+            self.text_label_input.setText("Вводные данные, которые известны:")
+            self.clear_lines(self.page1_lines)
+            self.groupBox_pageInput.setEnabled(True)  # включаем бокс для ввода данных
             
-        if self.figure == "Прямоугольник":
-            if self.Box_whatsearch.currentIndex() != RectangleWhatsearchVariant.whatsearch.value:
-                self.text_label_input.setText("Вводные данные, которые известны:")
-                self.clear_lines(self.page1_lines)
-                self.groupBox_pageInput.setEnabled(True)  # включаем бокс для ввода данных
-
+            if self.figure == "Прямоугольник":
                 # Изменение текста в полях и видимости полей в зависимости от того, что ищем
                 if self.Box_whatsearch.currentIndex() == RectangleWhatsearchVariant.sides.value:
                     self.setText_setVisibility_to_page1_lines(RectangleWhatsearchVariant.sides.value)
@@ -274,7 +276,7 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         if figure == "Прямоугольник":
 
             for id, element in enumerate(RectangleWhatsearchVariant):
-                addItem = str(element).partition(".")[-1]
+                addItem = repr(element._name_)
                 self.Box_whatsearch.addItem(addItem)
                 self.Box_whatsearch.setItemText(id, self._translate("MainWindow", element.name))
 
