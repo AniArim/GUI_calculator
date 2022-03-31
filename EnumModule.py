@@ -24,7 +24,7 @@ class FigureNames(enum.Enum):
         pass
 
     @classmethod
-    def keyForValue(cls, figure):
+    def keyForValue(cls, figure: str):
         data = tuple(cls)
         for object_ in data:
             if object_.value == figure:

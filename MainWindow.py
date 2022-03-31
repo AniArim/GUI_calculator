@@ -82,7 +82,7 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         
         self.Figure_2D_box.currentIndexChanged.connect(lambda: self.updateQComboBoxFigure(self.Figure_2D_box))
         self.Figure_3D_box.currentIndexChanged.connect(lambda: self.updateQComboBoxFigure(self.Figure_3D_box))
-        
+
         self.Box_whatsearch.currentIndexChanged.connect(self.box_whatsearch_clicked)
         
         self.lineEdit_page1_line1_input.textChanged.connect(lambda: self.lines_got_text(self.lineEdit_page1_line1_input.text(), self.lineEdit_page1_line1_input))
@@ -96,7 +96,7 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.paint_figure.clicked.connect(lambda: self.show_matplotlib_window(self.figure))
         self.Calculate.clicked.connect(self.calculate_result)
 
-    def add_html_text(self, name):
+    def add_html_text(self, name: str):
         """
         Метод считывает разметку и текст из файла name.txt и добавляет в self.text_descriptions
         
@@ -111,9 +111,9 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.text_descriptions.setHtml(self._translate("MainWindow", f"{self.html}"))
 
         except IOError:
-            pass
+            print("Exception: нет соответствия имени файла")
 
-    def switched(self, text):
+    def switched(self, text: str):
         """
         Метод переключения страниц объекта self.stackedWidget_func
         
@@ -152,17 +152,20 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def setText_setVisibility_to_page1_lines(self, enum_key: int):
         """
-        TODO добавить описание
-        :param enum_key:
-        :return:
+        Установка текста в полях. Отображение видимости для всех полей страницы Input.
+
+        :param enum_key: value для RectangleWhatsearchVariant.<name>
+        :return: None
         """
         index = 0
+        # кортеж из текстов, который мы будем отображать в полях параметров возможных  для поиска.
         titles = self.titles_for_parameters_in_lines_page1.get(self.figure).get(enum_key)
 
         for title in titles:
-            self.page1_lines[0][index].setText(title)
+            self.page1_lines[0][index].setText(title)  # добавляем текст в поля. Итерация по кортежу полей
             index += 1
 
+        # отображение или скрытие для всех полей в зависимости от наличия текста в поле параметров возможных для поиска
         for index, line in enumerate(self.page1_lines[0]):
             equal_line_input = self.page1_lines[1][index]
 
@@ -178,21 +181,23 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def box_whatsearch_clicked(self):
         """
-        Обработка событий в поле "Что ищем?"
+        Обработка событий в Box_whatsearch
+
         :return:  None
         """
 
-        if self.Box_whatsearch.currentIndex() == RectangleWhatsearchVariant.whatsearch.value:  # Если "Что ищем?", тогда текст сбрасывается
+        if self.Box_whatsearch.currentIndex() == RectangleWhatsearchVariant.whatsearch.value:
             self.groupBox_pageInput.setEnabled(False)  # Выключаем кликабельность бокса для ввода параметров
             self.clear_lines(self.page1_lines)  # Очищаем поля с параметрами поиска и ввода пользователя
             self.text_label_input.setText("Выберите параметр для поиска.")  # Устанавливаем дефолтное значение
             self.setText_setVisibility_to_page1_lines(RectangleWhatsearchVariant.whatsearch.value)
         else:
-            self.text_label_input.setText("Вводные данные, которые известны:")
-            self.clear_lines(self.page1_lines)
+            self.text_label_input.setText("Вводные данные, которые известны:")  # Устанавливаем значение для поиска параметров
+            self.clear_lines(self.page1_lines)  # Очищаем поля с параметрами поиска и ввода пользователя
             self.groupBox_pageInput.setEnabled(True)  # включаем бокс для ввода данных
             
             if self.figure == FigureNames.rectangle.value:
+
                 # Изменение текста в полях и видимости полей в зависимости от того, что ищем
                 if self.Box_whatsearch.currentIndex() == RectangleWhatsearchVariant.sides.value:
                     self.setText_setVisibility_to_page1_lines(RectangleWhatsearchVariant.sides.value)
@@ -219,45 +224,39 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def updateQComboBoxFigure(self, box_object: QtWidgets.QComboBox):
         """
-        На странице Input и Output выводим значение фигуры, с которой будем работать, в зависимости от того, что выберет
-        user.
-        Если фигура не выбрана, виджет для ввода и вывода информации не кликабелен. Очищаем главное окно  с изображением.
-        И устанавливаем gif.
-        Если фигура выбрана, виджет для ввода, вывода и описания кликабелен. Не кликабельным остается поле для ввода
-        данных до тех пор, пока пользователь не выберет, что именно нужно найти для выбранной фигуры. Создаем объект
-        фигуры с которой будем работать. Очищаем переменную с данными о описании свойств фигуры. Добавляем описание
-        свойств для нвыбранной фигуры.
+        Обработка событий после нажатия на self.Figure2D_box или self.Figure3d_box
         
         :return: None
         """
+        # на странице Input и Output текст "Выберите фигуру" меняем на название фигуры
         self.plainTextEdit_figure_input.setPlainText(box_object.currentText())
         self.plainTextEdit_figure_output.setPlainText(box_object.currentText())
 
         self.figure = self.plainTextEdit_figure_input.toPlainText() or None  # фигура с которой будем работать
-        self.data_figure_values_input = {self.figure: {}}  # Создаем словарь в котором обновляем данные после ввода
-                                                            # пользователем в lines_got_text(self, text, line)
-        self.html = ""
+        # Создаем словарь в котором обновляем данные после ввода пользователем в lines_got_text(self, text, line)
+        self.data_figure_values_input = {self.figure: {}}
+        self.html = ""  # Сбрасываем текст в описании свойств
         self.text_descriptions.setHtml(self._translate("MainWindow", f"{self.html}"))
-        
+
         if box_object.currentIndex() == 0:
-            self.Box_formulas.setEnabled(False)
-            self.Box_whatsearch.setCurrentText("Что нужно найти?")
-            self.label_image.clear()
-            self.label_image.setMovie(self.gif)
+            self.Box_formulas.setEnabled(False)  # Отключение кликабельности всего бокса, пока не выбрана фигура
+            self.Box_whatsearch.setCurrentText(RectangleWhatsearchVariant.whatsearch.text)
+            self.label_image.clear()  # очищение изображения в левой части окна
+            self.label_image.setMovie(self.gif)  # установка дефолтного gif изображения
 
         else:
             self.Box_formulas.setEnabled(True)
-            self.groupBox_pageInput.setEnabled(False)
+            self.groupBox_pageInput.setEnabled(False)  # отключение кликабельности бокса с полями, пока не выбран параметр для поиска
             self.func_figure(box_object.currentText())
             self.update_image()
 
-            file_name = FigureNames(FigureNames.keyForValue(self.figure)).name
+            file_name = FigureNames(FigureNames.keyForValue(self.figure)).name  # Получаем из сабкласса Enum имя по значению
             self.add_html_text(file_name)
 
-    def func_figure(self, figure):
+    def func_figure(self, figure: str):
         """
-        If figure >> object Box_whatsearch adding Item from self.whatsearch_variants.
-        If not figure >> object Box_whatsearch clearing themself (delete all Items), adding title
+        Для фигуры добавляем в Box_whatsearch поля и текст. Если фигура None поля удаляются, устанавливается текст по умолчанию.
+
         :param figure: self.figure
         :return: None
         """
@@ -272,42 +271,51 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.Box_whatsearch.addItem(f"{RectangleWhatsearchVariant.whatsearch.text}")
             self.Box_whatsearch.setItemText(0, self._translate("MainWindow", RectangleWhatsearchVariant.whatsearch.text))
 
-    def lines_got_text(self, text, line):
+    def lines_got_text(self, text: str, line: QtWidgets.QLineEdit):
         """
-        Обновление словаря с входными данными в self.data_figure_values_input. Скрываем все поля для вывода на странице
-        Output. очищаем поле для выввода информации о функции, которая была задействована для вычислений.
-        Дополнительная валидация вводных данных. Запятая в тексте изменятся на точку. Точка в начале текста изменяется
-        на ноль с точкой. Если поле очищается - пары ключ:значение удаляются из словаря.
-        
+        Метод дополнительной валидации всего вводимого текста, очистка полей для вывода результата.
+
         :param text: текс из любого поля для ввода
         :param line: объект этого поля для ввода
         :return: None
         """
         if text:
             try:
-                self.data_figure_values_input.get(self.figure).update({line.objectName(): float(text)})
-                self.clear_lines(self.page2_lines)
-                self.hide_lineEdit_page2(1)
-                self.hide_lineEdit_page2(2)
-                self.plainTextEdit_page2_about_result.setPlainText("")
+                self.data_figure_values_input.get(self.figure).update({line.objectName(): float(text)})  # Обновление словаря с входными данными
+                self.clear_lines(self.page2_lines)  # Очистка полей на второй странице
+                self.hide_lineEdit_page2_line(1)
+                self.hide_lineEdit_page2_line(2)
+                self.plainTextEdit_page2_about_result.setPlainText("")  # Очистка метода поиска параметра (описание функции)
             except ValueError:
                 if text == ".":
                     line.setText('0.')
                 elif "," in text:
                     line.setText(text.replace(",", "."))
+
         else:
             try:
+                # Очистка словаря с данными, если пользователь удалил ввод
                 self.data_figure_values_input.get(self.figure).pop(line.objectName())
             except KeyError:
                 pass
 
     def calculate_result(self):
+        """
+        Если поле для ввода активно вызывается метод рассчетов.
+
+        :return: None
+        """
         if not self.groupBox_pageInput.isEnabled():
             pass
         else:
             self.make_calculations()
 
     def page2_line1_placement(self, functionVariant: enum.Enum):
+        """
+        Когда для вывода будет только один результат.
+        Создание экземпляра дочернего класса Figure_2D. Получение результата по формуле, в зависимости от параметров.
+        Добавление результата в текстовое поле на странице Output.
+        """
 
         self.result = Rectangle(self.Box_whatsearch.currentIndex(),
                                 self.data_figure_values_input.get(self.figure), functionVariant)
@@ -317,9 +325,15 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         else:
             return
 
-    def page2_two_lines_placement(self, functionVariant: RectangleSidesFormulas):
+    def page2_two_lines_placement(self, functionVariant: enum.Enum):
+        """
+        Когда для вывода будет два результата.
+        Создание экземпляра дочернего класса Figure_2D. Получение результата по формуле, в зависимости от параметров.
+        Добавление результата в текстовое поле на странице Output
+        """
         self.result = Rectangle(self.Box_whatsearch.currentIndex(),
                                 self.data_figure_values_input.get(self.figure), functionVariant)
+
         if self.result.result():
             self.sideA, self.sideB = self.result.result()
             self.lineEdit_page2_line1.setText("Сторона a")
@@ -328,8 +342,8 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.lineEdit_page2_line1_out.setText(f"{self.sideA}")
             self.lineEdit_page2_line2_out.setText(f"{self.sideB}")
             self.plainTextEdit_page2_about_result.setPlainText(functionVariant.text)
-            return self.stackedWidget_func.setCurrentIndex(1), self.show_lineEdit_page2(1), \
-                   self.show_lineEdit_page2(2)
+            return self.stackedWidget_func.setCurrentIndex(1), self.show_lineEdit_page2_line(1), self.show_lineEdit_page2_line(2)
+
         else:
             return
 
@@ -346,13 +360,7 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def make_calculations(self):
         """
-        Если все поля пустые, то для любой фигуры выдаем ошибку, если нет, выполняется блок проверки для каждой
-        фигуры, входных данных для поиска параметра для конкретной фигуры по ряду функций.  Если все данные введены корректно,
-        создаем объект класса фигуры, наследуемый от Figure_2D. Получаем результат в зависимости от введенных
-        данных (различные функции для каждого способа). Результат - self.result.<parameter>, где <parameter> - это
-        название переменной, где хранится функция вычисления. Результат передаем на страницу вывода результатов
-        :return:  self.show_lineEdit_page2(1) метод отображения полей для вывода результата,
-        self.stackedWidget_func.setCurrentIndex(1) - переключаем страницу с Input на Output
+        :return: self.show_lineEdit_page2_line(1), self.stackedWidget_func.setCurrentIndex(1)
         """
 
         if self.figure:
@@ -547,9 +555,13 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                                                             "2. Площадь и диагональ\n")
                             return
 
-                    return self.show_lineEdit_page2(1), self.stackedWidget_func.setCurrentIndex(1)
+                    return self.show_lineEdit_page2_line(1), self.stackedWidget_func.setCurrentIndex(1)
     
-    def show_lineEdit_page2(self, line: int):
+    def show_lineEdit_page2_line(self, line: int):
+        """
+        :param line: номер поля
+        :return: None
+        """
         if line == 1:
             self.lineEdit_page2_line1.setHidden(False)
             self.lineEdit_page2_line1_out.setHidden(False)
@@ -557,7 +569,11 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.lineEdit_page2_line2.setHidden(False)
             self.lineEdit_page2_line2_out.setHidden(False)
     
-    def hide_lineEdit_page2(self, line: int):
+    def hide_lineEdit_page2_line(self, line: int):
+        """
+        :param line: номер поля
+        :return: None
+        """
         if line == 1:
             self.lineEdit_page2_line1.setHidden(True)
             self.lineEdit_page2_line1_out.setHidden(True)
@@ -569,7 +585,6 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def error_message_show(text="", details=""):
     
         ui = ErrorDialog(text=text, details=details)
-        print(ui)
         ui.setupUi(ui)
         ui.show()
         
@@ -577,17 +592,15 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         ui.btn_details.clicked.connect(lambda: ui.btn_clicked(ui.btn_details.text(), ui))
 
     @staticmethod
-    def show_matplotlib_window(fig):
+    def show_matplotlib_window(fig: str):
 
         ui = PlotWindow(figure=fig)
-        print(ui)
         ui.setupUi(ui)
         ui.show()
 
     def update_image(self):
         """
         Очищаем виджет с изображением в левой части окна. Добавляет изображение для выбранной фигуры
-
         """
         file_name = FigureNames(FigureNames.keyForValue(self.figure)).name
         path = Path.cwd()/'images'/'figures'/file_name
