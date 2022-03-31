@@ -1,7 +1,5 @@
 import enum
 
-# ToDo было бы неплохо изменить переопределенный метод name на func, т.к. name
-#  по умолчанию возвращает приставку класса
 
 class FigureNames(enum.Enum):
 
@@ -21,6 +19,9 @@ class FigureNames(enum.Enum):
     cylinder = "Цилиндр круговой"
     cone = "Конус круговой"
     sphere = "Шар, сфера"
+
+    def __init__(self, *args):
+        pass
 
     @classmethod
     def keyForValue(cls, figure):
@@ -57,7 +58,7 @@ class RectangleWhatsearchVariant(enum.Enum):
         )
 
     @property
-    def name(self):
+    def text(self):
         return self.names()[self.value]
 
 
@@ -71,7 +72,7 @@ class RectangleParentFormulas(enum.Enum):
         return ()
 
     @property
-    def name(self):
+    def text(self):
         return self.names()[self.value]
 
 

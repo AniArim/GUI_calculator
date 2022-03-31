@@ -54,7 +54,7 @@ class Rectangle(Figure_2D):
         :return: искомая величина, класс Decimal. Углы окгругляются до целого числа, другие параметры - до десятых.
         False - если вызвана ошибка
         """
-        if self.whatsearch == RectangleWhatsearchVariant.sides:  # Стороны
+        if self.whatsearch == RectangleWhatsearchVariant.sides.value:  # Стороны
             if self.variant == RectangleSidesFormulas.diagonalAndSide:
                 self.diagonal = self.get_value_from_data_input_line(3)
                 self.side_desired = math.sqrt(self.diagonal ** 2 - self.side ** 2)
@@ -101,7 +101,7 @@ class Rectangle(Figure_2D):
 
             return Decimal(f"{self.side_desired}").quantize(Decimal('1.0'), decimal.ROUND_HALF_UP)
         
-        elif self.whatsearch == RectangleWhatsearchVariant.diagonal:  # Диагональ
+        elif self.whatsearch == RectangleWhatsearchVariant.diagonal.value:  # Диагональ
 
             if self.variant == RectangleDiagFormulas.pythagoras:
                 self.diagonal = math.sqrt(self.sideA ** 2 + self.sideB ** 2)
@@ -145,7 +145,7 @@ class Rectangle(Figure_2D):
 
             return Decimal(f"{self.diagonal}").quantize(Decimal('1.0'), decimal.ROUND_HALF_UP)
         
-        elif self.whatsearch == RectangleWhatsearchVariant.perimeter:  # Периметр
+        elif self.whatsearch == RectangleWhatsearchVariant.perimeter.value:  # Периметр
 
             if self.variant == RectanglePerimeterFormulas.sides:
                 if self.sideA and self.sideB:
@@ -165,7 +165,7 @@ class Rectangle(Figure_2D):
 
             return Decimal(f"{self.perimeter}").quantize(Decimal('1.0'), decimal.ROUND_HALF_UP)
         
-        elif self.whatsearch == RectangleWhatsearchVariant.square:  # Площадь
+        elif self.whatsearch == RectangleWhatsearchVariant.square.value:  # Площадь
 
             if self.variant == RectangleSquareFormulas.sides:
                 self.square = self.sideA * self.sideB
@@ -194,7 +194,7 @@ class Rectangle(Figure_2D):
 
             return Decimal(f"{self.square}").quantize(Decimal('1.0'), decimal.ROUND_HALF_UP)
         
-        elif self.whatsearch == RectangleWhatsearchVariant.radius:  # Окружность описанная вокруг
+        elif self.whatsearch == RectangleWhatsearchVariant.radius.value:  # Окружность описанная вокруг
             
             if self.variant == RectangleRadiusFormulas.sides:
                 self.radius = (math.sqrt(self.sideA ** 2 + self.sideB ** 2)) / 2
@@ -235,7 +235,7 @@ class Rectangle(Figure_2D):
 
             return Decimal(f"{self.radius}").quantize(Decimal('1.0'), decimal.ROUND_HALF_UP)
         
-        elif self.whatsearch == RectangleWhatsearchVariant.angleA:  # Угол между стороной и диагональю прямоугольника
+        elif self.whatsearch == RectangleWhatsearchVariant.angleA.value:  # Угол между стороной и диагональю прямоугольника
 
             if self.variant == RectangleAngleAFormulas.diagonalAndSide:
                 self.diagonal = self.get_value_from_data_input_line(3)
@@ -254,7 +254,7 @@ class Rectangle(Figure_2D):
 
             return Decimal(f"{self.angleA}").quantize(Decimal('1'), decimal.ROUND_HALF_UP)
         
-        elif self.whatsearch == RectangleWhatsearchVariant.angleB:  # угол между диагоналями прямоугольника
+        elif self.whatsearch == RectangleWhatsearchVariant.angleB.value:  # угол между диагоналями прямоугольника
             if self.variant == RectangleAngleBFormulas.angleA:
                 if self.get_value_from_data_input_line(3) < 180:
                     self.angleA = self.get_value_from_data_input_line(3)
