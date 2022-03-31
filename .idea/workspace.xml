@@ -37,7 +37,7 @@
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
-  <component name="RunManager" selected="Python.EnumModule">
+  <component name="RunManager" selected="Python.main">
     <configuration name="EnumModule" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="GUI_calculator" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -84,8 +84,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.EnumModule" />
         <item itemvalue="Python.main" />
+        <item itemvalue="Python.EnumModule" />
       </list>
     </recent_temporary>
   </component>
@@ -100,7 +100,7 @@
       <workItem from="1648380461133" duration="50365000" />
       <workItem from="1648545456650" duration="11287000" />
       <workItem from="1648582060306" duration="12456000" />
-      <workItem from="1648661998548" duration="14019000" />
+      <workItem from="1648661998548" duration="14389000" />
     </task>
     <servers />
   </component>
@@ -109,13 +109,6 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/MainWindow.py</url>
-          <line>171</line>
-          <option name="timeStamp" value="16" />
-        </line-breakpoint>
-      </breakpoints>
       <default-breakpoints>
         <breakpoint type="python-exception">
           <properties notifyOnTerminate="true" exception="BaseException">
@@ -126,7 +119,7 @@
     </breakpoint-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/GUI_calculator$main.coverage" NAME="main Coverage Results" MODIFIED="1648703056432" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/GUI_calculator$main.coverage" NAME="main Coverage Results" MODIFIED="1648707126121" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/GUI_calculator$EnumModule.coverage" NAME="EnumModule Coverage Results" MODIFIED="1648706807572" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

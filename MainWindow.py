@@ -19,16 +19,6 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         self.html = ""
 
-        # Словарь изображений для фигур
-        self.png_data = {"Прямоугольник": "rectangle.png", "Параллелограмм": "parallelogram.png",
-                         "Квадрат": "square.png",
-                         "Ромб": "rhombus.png", "Трапеция равнобедренная": "trapezium1.png",
-                         "Трапеция прямоугольная": "trapezium2.png",
-                         "Треугольник": "triangle.png", "Шестиугольник": "hexagon.png", "Окружность": "circle.png",
-                         "Призма": "prism.png", "Параллелепипед": "cuboid.png", "Куб": "cube.png",
-                         "Пирамида": "pyramid.png",
-                         "Цилиндр круговой": "cylinder.png", "Конус круговой": "cone.png", "Шар, сфера": "sphere.png"}
-
         self.titles_for_parameters_in_lines_page1 = {
             "Прямоугольник": {
                 RectangleWhatsearchVariant.whatsearch.value: "",
@@ -263,7 +253,7 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.func_figure(box_object.currentText())
             self.update_image(self.plainTextEdit_figure_input.toPlainText())
 
-            file_name = f'{self.png_data.get(self.figure).partition(".")[0]}'
+            file_name = FigureNames(FigureNames.keyForValue(self.figure)).name
             self.add_html_text(file_name)
 
     def func_figure(self, figure):
@@ -606,7 +596,8 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         :param figure: текст из self.plainTextEdit_figure_input
         :return: None
         """
-        path = Path.cwd()/'images'/'figures'/f'{self.png_data.get(figure)}'
+        file_name = FigureNames(FigureNames.keyForValue(self.figure)).name
+        path = Path.cwd()/'images'/'figures'/file_name
         self.label_image.clear()
         self.label_image.setPixmap(QtGui.QPixmap(f"{path}"))
         
