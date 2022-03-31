@@ -9,11 +9,10 @@ from EnumModule import *
 
 class Figure_2D:
     
-    def __init__(self, whatsearch: int, data_input: dict, variant: enum.Enum):
+    def __init__(self, whatsearch: enum.Enum, data_input: dict, variant: enum.Enum):
         self.data_input = data_input  # Словарь типа "lineEdit_page1_line1" : 56.2"
         self.whatsearch = whatsearch  # Индекс. по нему получаем список отображаемых полей
                                       # self.Box_lines_page1.get(self.figure).get(self.whatsearch) из MainWindow.py
-        #self.figure = figure
         self.variant = variant
         self.diameter = None
         self.radius = None
@@ -22,14 +21,10 @@ class Figure_2D:
         self.diagonal = None
         self.angleA = None
         self.angleB = None
-        '''self.Box_whatsearch = {
-            "Прямоугольник": {"Стороны": ()}
-        }'''
-
 
     @staticmethod
     def error_show():
-        #global ErrorDialog
+
         ui = ErrorDialog(text="Угол не может быть больше 180 градусов!",
                          details="Угол равный 180 градусам - это прямая. Введите угол меньше 180 градусов.")
         ui.setupUi(ui)
@@ -41,7 +36,7 @@ class Figure_2D:
 
 class Rectangle(Figure_2D):
     
-    def __init__(self,  whatsearch: int, data_input: dict, variant: enum.Enum):
+    def __init__(self,  whatsearch: enum.Enum, data_input: dict, variant: enum.Enum):
         super().__init__(whatsearch, data_input, variant)
 
         self.sideA = self.get_value_from_data_input_line(1) or None

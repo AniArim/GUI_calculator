@@ -14,11 +14,8 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def __init__(self, parent=None):
         super(RootWindow, self).__init__(parent)
-
         self.setWindowIcon(QtGui.QIcon(f"{Path.cwd() / 'images' / 'icon.png'}"))
-
         self.html = ""
-
         self.titles_for_parameters_in_lines_page1 = {
             FigureNames.rectangle.value: {
                 RectangleWhatsearchVariant.whatsearch.value: "",
@@ -251,7 +248,7 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.Box_formulas.setEnabled(True)
             self.groupBox_pageInput.setEnabled(False)
             self.func_figure(box_object.currentText())
-            self.update_image(self.plainTextEdit_figure_input.toPlainText())
+            self.update_image()
 
             file_name = FigureNames(FigureNames.keyForValue(self.figure)).name
             self.add_html_text(file_name)
@@ -587,12 +584,10 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         ui.setupUi(ui)
         ui.show()
 
-    def update_image(self, figure: str):
+    def update_image(self):
         """
         Очищаем виджет с изображением в левой части окна. Добавляет изображение для выбранной фигуры
-        
-        :param figure: текст из self.plainTextEdit_figure_input
-        :return: None
+
         """
         file_name = FigureNames(FigureNames.keyForValue(self.figure)).name
         path = Path.cwd()/'images'/'figures'/file_name

@@ -29,6 +29,7 @@ class FigureNames(enum.Enum):
             if object_.value == figure:
                 return object_
 
+
 class RectangleWhatsearchVariant(enum.Enum):
     whatsearch = 0  # "Что нужно найти?"
     sides = 1  # "Стороны"

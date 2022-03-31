@@ -100,7 +100,7 @@
       <workItem from="1648380461133" duration="50365000" />
       <workItem from="1648545456650" duration="11287000" />
       <workItem from="1648582060306" duration="12456000" />
-      <workItem from="1648661998548" duration="16035000" />
+      <workItem from="1648661998548" duration="16973000" />
     </task>
     <servers />
   </component>
@@ -119,7 +119,7 @@
     </breakpoint-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/GUI_calculator$main.coverage" NAME="main Coverage Results" MODIFIED="1648708235459" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/GUI_calculator$main.coverage" NAME="main Coverage Results" MODIFIED="1648709872592" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/GUI_calculator$EnumModule.coverage" NAME="EnumModule Coverage Results" MODIFIED="1648706807572" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

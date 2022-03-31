@@ -17,12 +17,10 @@ class MatplotlibWidget(QtWidgets.QWidget):
 
     def __init__(self, parent=None):
         super(MatplotlibWidget, self).__init__(parent)
-        pyplot.close()
-        print("pyplot.get_fignums", pyplot.get_fignums())
+
+        pyplot.close()  # чтобы не возникали ошибки накладывания осей при повторном вызове.
+                        # Чтобы не было ошибки C/C++ с FigureCanvasQTAgg
         self.figure_draw = pyplot.gcf()
-        print("self.figure_draw", self.figure_draw)
-        #self.figure_draw.clear()  # очистка фигуры от элементов прошлого рисунка при повторном вызове.
-        print("pyplot.get_fignums2", pyplot.get_fignums())
         self.figure_draw.set_facecolor("#e3e3e3")
         self.canvas = FigureCanvasQTAgg(self.figure_draw)
         self.axes = self.figure_draw.add_subplot(111)
@@ -87,7 +85,7 @@ class PlotWindow(QtWidgets.QDialog, Ui_MatplotlibWindow):
         self.widget.radius = self.diagonal/2
         i = ((-self.radius + self.heigth / 2) - (0.5 * self.decade_)) / 2
         
-        self.widget.figure_draw.suptitle("Прямоугольник")  # Название фигуры
+        self.widget.figure_draw.suptitle(self.figure)  # Название фигуры
         self.widget.axes.axis("equal")  # чтобы круг был кругом, а не элипсом
         self.widget.axes.set(ylim=((-self.radius+self.heigth/2) - math.fabs(i), self.diagonal))  # граничные значения
         self.widget.axes.xaxis.set_major_locator(
@@ -152,7 +150,7 @@ class PlotWindow(QtWidgets.QDialog, Ui_MatplotlibWindow):
         
         self.widget.axes.clear()  # очищаем оси для отрисовки фигуры с измененными параметрами в уже активном окне.
         
-        if self.figure == "Прямоугольник":
+        if self.figure == FigureNames.rectangle.value:
             
             self.heigth = self.data_input.get(self.figure).get("label_1_input")
             self.weight = self.data_input.get(self.figure).get("label_2_input")
