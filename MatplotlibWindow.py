@@ -46,11 +46,9 @@ class PlotWindow(QtWidgets.QDialog, Ui_MatplotlibWindow):
         self.pushButton_go.clicked.connect(self.plot_widget)
         self.pushButton_save.clicked.connect(self.save_image)
 
-    def lines_got_text(self, text: str, line):
+    def lines_got_text(self, text: str, line: QtWidgets.QLineEdit):
         """
-        Обновление словаря с входными данными в self.data_input.
-        Дополнительная валидация вводных данных. Запятая в тексте изменятся на точку. Точка в начале текста изменяется
-        на ноль с точкой. Если поле очищается - пары ключ:значение удаляются из словаря.
+        Метод дополнительной валидации всего вводимого текста, очистка полей для вывода результата.
         
         :param text: текс из любого поля для ввода
         :param line: объект этого поля для ввода
@@ -83,7 +81,7 @@ class PlotWindow(QtWidgets.QDialog, Ui_MatplotlibWindow):
         :return: None
         """
         self.widget.radius = self.diagonal/2
-        i = ((-self.radius + self.heigth / 2) - (0.5 * self.decade_)) / 2
+        i = ((-self.radius + self.heigth / 2) - (0.5 * self.scaling_)) / 2
         
         self.widget.figure_draw.suptitle(self.figure)  # Название фигуры
         self.widget.axes.axis("equal")  # чтобы круг был кругом, а не элипсом
@@ -123,7 +121,7 @@ class PlotWindow(QtWidgets.QDialog, Ui_MatplotlibWindow):
         self.widget.axes.set_facecolor("#e3e3e3")
         self.widget.axes.grid()
         
-    def decade(self, number_x: (int, float), number_y: (int, float)):
+    def scaling(self, number_x: (int, float), number_y: (int, float)):
         """
         Для корректного масштабирования осей и букв на рисунке  необходимо знать количество десятков во входных данных.
         Возвращаем максимальное значение - цифру для умножения при рассчете масштабирования.
@@ -135,8 +133,8 @@ class PlotWindow(QtWidgets.QDialog, Ui_MatplotlibWindow):
         len_x = len(str(number_x).partition(".")[0])
         len_y = len(str(number_y).partition(".")[0])
         i = max(len_x, len_y)
-        self.decade_ = 1 if i <= 1 else 10 ** (i - 1)
-        return self.decade_
+        self.scaling_ = 1 if i <= 1 else 10 ** (i - 1)
+        return self.scaling_
 
     def plot_widget(self):
         """
@@ -157,7 +155,7 @@ class PlotWindow(QtWidgets.QDialog, Ui_MatplotlibWindow):
             
             if self.weight and self.heigth:
 
-                self.decade_ = self.decade(self.weight, self.heigth)
+                self.scaling_ = self.scaling(self.weight, self.heigth)
                 temp = {
                     "lineEdit_page1_line1_input": self.heigth,
                     "lineEdit_page1_line2_input": self.weight

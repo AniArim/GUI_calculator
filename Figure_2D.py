@@ -6,13 +6,11 @@ from ErrorWindow import ErrorDialog
 from EnumModule import *
 
 
-
 class Figure_2D:
     
     def __init__(self, whatsearch: enum.Enum, data_input: dict, variant: enum.Enum):
         self.data_input = data_input  # Словарь типа "lineEdit_page1_line1" : 56.2"
         self.whatsearch = whatsearch  # Индекс. по нему получаем список отображаемых полей
-                                      # self.Box_lines_page1.get(self.figure).get(self.whatsearch) из MainWindow.py
         self.variant = variant
         self.diameter = None
         self.radius = None
