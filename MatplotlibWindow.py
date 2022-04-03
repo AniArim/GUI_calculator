@@ -160,9 +160,9 @@ class PlotWindow(QtWidgets.QDialog, Ui_MatplotlibWindow):
                     "lineEdit_page1_line1_input": self.heigth,
                     "lineEdit_page1_line2_input": self.weight
                     }
-                self.diag = Rect(RectangleWhatsearchVariant.diagonal, temp, RectangleDiagFormulas.pythagoras)
-                self.perimeter = Rect(RectangleWhatsearchVariant.perimeter, temp, RectanglePerimeterFormulas.sides)
-                self.square = Rect(RectangleWhatsearchVariant.square, temp, RectangleSquareFormulas.sides)
+                self.diag = Rect(RectangleWhatsearchVariant.diagonal.value, temp, RectangleDiagFormulas.pythagoras)
+                self.perimeter = Rect(RectangleWhatsearchVariant.perimeter.value, temp, RectanglePerimeterFormulas.sides)
+                self.square = Rect(RectangleWhatsearchVariant.square.value, temp, RectangleSquareFormulas.sides)
 
                 self.diagonal = float(self.diag.result())
                 self.radius = self.diagonal/2
