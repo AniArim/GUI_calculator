@@ -5,9 +5,8 @@ license for font: commercial and personal usage
 
 import sys
 from pathlib import Path
-from PyQt5 import QtGui, QtWidgets, QtCore
+from PyQt5 import QtGui, QtWidgets
 from MainWindow import RootWindow
-import source
 
 
 try:
