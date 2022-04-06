@@ -1,7 +1,7 @@
 
 from pathlib import Path
 
-from PyQt5 import QtGui, QtWidgets
+from PyQt5 import QtGui, QtWidgets, QtCore
 
 from EnumModule import *
 from ErrorWindow import ErrorDialog
@@ -14,6 +14,13 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def __init__(self, parent=None):
         super(RootWindow, self).__init__(parent)
+
+        self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
+        self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
+        self.setMouseTracking(True)
+
+        self.cursorPosition = self.cursor().pos()
+        self.windowPosition = self.pos()
 
         self.setWindowIcon(QtGui.QIcon(f"{Path.cwd() / 'images' / 'icon.png'}"))
         self.html = ""
@@ -77,6 +84,9 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def add_functions(self):
 
+        self.closeWindowButton.clicked.connect(self.closeWindow)
+        self.minimizeWindowButton.clicked.connect(self.minimizeWindow)
+
         self.switch_left.clicked.connect(lambda: self.switched(self.switch_left.text()))
         self.switch_right.clicked.connect(lambda: self.switched(self.switch_right.text()))
         
@@ -121,7 +131,7 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         :return: None
         """
         index = self.stackedWidget_func.currentIndex()
-        if text == "◄":
+        if text == "¬":
             if index == 0:
                 self.stackedWidget_func.setCurrentIndex(2)
             elif index == 1:
@@ -606,6 +616,30 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         path = Path.cwd()/'images'/'figures'/file_name
         self.label_image.clear()
         self.label_image.setPixmap(QtGui.QPixmap(f"{path}"))
+
+    def mousePressEvent(self, event):
+        self.cursorPosition = event.pos()
+        if event.button == QtCore.Qt.LeftButton:
+            self.windowPosition = event.pos()
+            event.accept()
+
+    def mouseReleaseEvent(self, event):
+        if event.button() == QtCore.Qt.LeftButton:
+            self.windowPosition = event.pos()
+
+    def mouseMoveEvent(self, event):
+        try:
+            delta = event.pos() - self.cursorPosition
+            self.move(self.pos() + delta)
+        except TypeError:
+            return
+
+    def closeWindow(self):
+        self.close()
+        self.destroy()
+
+    def minimizeWindow(self):
+        self.showMinimized()
         
 
 
