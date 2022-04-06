@@ -66,8 +66,9 @@ class Ui_MainWindow(object):
         self.titleLabel.setTabletTracking(True)
         self.titleLabel.setStyleSheet("border: 0px;\n"
 "background-color: rgba(255, 255, 255, 0);\n"
+f"font: bold 16pt {self.fontName};\n"
 "color: rgb(255, 8, 0);")
-        self.titleLabel.setFont(self.font)
+        #self.titleLabel.setFont(self.font)
         self.titleLabel.setObjectName("titleLabel")
 
         self.windowButtonsFrame = QtWidgets.QFrame(self.header_frame)
@@ -110,10 +111,6 @@ class Ui_MainWindow(object):
 
         self.Figure_2D_box = QtWidgets.QComboBox(self.centralwidget)
         self.Figure_2D_box.setGeometry(QtCore.QRect(19, 60, 400, 50))
-        '''font = QtGui.QFont()
-        font.setFamily("Segoe Print")
-        font.setPointSize(14)'''
-        #self.Figure_2D_box.setFont(self.font)
         self.Figure_2D_box.setStyleSheet("QComboBox {\n"
 "background-color: qlineargradient(spread:reflect, x1:1, y1:0.455, x2:1, y2:0, stop:0.323383 rgba(15, 4, 4, 224), stop:0.995025 rgba(255, 255, 255, 217));\n"
 "\n"
@@ -247,9 +244,12 @@ f"font: 9pt 'Segoe Print'"
 "padding: 5px;\n"
 "}\n"
 "")
+        self.Box_whatsearch.setAttribute(QtCore.Qt.WA_NoMousePropagation)  # запрещает передачу событий мыши главному виджету.
         self.Box_whatsearch.setMouseTracking(False)
+        self.Box_whatsearch.setTabletTracking(False)
         self.Box_whatsearch.setObjectName("Box_whatsearch")
         self.Box_whatsearch.addItem(f"{RectangleWhatsearchVariant.whatsearch.name}")
+
 
         self.plainTextEdit_figure_input = QtWidgets.QPlainTextEdit(self.Input)
         self.plainTextEdit_figure_input.setGeometry(QtCore.QRect(10, 10, 350, 30))
@@ -979,13 +979,3 @@ f"font: bold 18pt {self.fontName}"
     def add_functions(self):
         pass
 
-
-
-if __name__ == "__main__":
-    import sys
-    app = QtWidgets.QApplication(sys.argv)
-    MainWindow = QtWidgets.QMainWindow()
-    ui = Ui_MainWindow()
-    ui.setupUi(MainWindow)
-    MainWindow.show()
-    sys.exit(app.exec_())

@@ -18,6 +18,7 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
         self.setMouseTracking(True)
+        self.setAttribute(QtCore.Qt.WA_DeleteOnClose)
 
         self.cursorPosition = self.cursor().pos()
         self.windowPosition = self.pos()
@@ -271,6 +272,7 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         :return: None
         """
         if figure == FigureNames.rectangle.value:
+            self.Box_whatsearch.clear()
 
             for id, element in enumerate(RectangleWhatsearchVariant):
                 self.Box_whatsearch.addItem(element.name)
