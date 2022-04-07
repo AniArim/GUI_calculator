@@ -28,9 +28,6 @@ class Figure_2D:
         ui.setupUi(ui)
         ui.show()
 
-        ui.btn_ok.clicked.connect(lambda: ui.btn_clicked(ui.btn_ok.text(), ui))
-        ui.btn_details.clicked.connect(lambda: ui.btn_clicked(ui.btn_details.text(), ui))
-
 
 class Rectangle(Figure_2D):
     

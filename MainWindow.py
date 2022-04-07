@@ -600,8 +600,8 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         ui.setupUi(ui)
         ui.show()
         
-        ui.btn_ok.clicked.connect(lambda: ui.btn_clicked(ui.btn_ok.text(), ui))
-        ui.btn_details.clicked.connect(lambda: ui.btn_clicked(ui.btn_details.text(), ui))
+        '''ui.btn_ok.clicked.connect(lambda: ui.btn_clicked(ui.btn_ok.text(), ui))
+        ui.btn_details.clicked.connect(lambda: ui.btn_clicked(ui.btn_details.text(), ui))'''
 
     @staticmethod
     def show_matplotlib_window(fig: str):

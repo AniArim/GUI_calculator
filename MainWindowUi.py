@@ -145,6 +145,7 @@ f"font: bold 18pt {self.fontName}"
         self.Figure_2D_box.setInsertPolicy(QtWidgets.QComboBox.InsertAtBottom)
         self.Figure_2D_box.setFrame(True)
         self.Figure_2D_box.setModelColumn(0)
+        self.Figure_2D_box.setAttribute(QtCore.Qt.WA_NoMousePropagation)
         self.Figure_2D_box.setObjectName("Figure_2D_box")
         self.Figure_2D_box.addItems(("Figure_2D", "Rectangle", "Parallelogram", "Square", "Rhombus", "Trapezoid 1",
                                      "Trapezoid 2", "Triangle", "Hexagon", "Circle"))
@@ -887,6 +888,7 @@ f"font: bold 18pt {self.fontName}"
         self.Figure_3D_box.setInsertPolicy(QtWidgets.QComboBox.InsertAtBottom)
         self.Figure_3D_box.setFrame(True)
         self.Figure_3D_box.setModelColumn(0)
+        self.Figure_3D_box.setAttribute(QtCore.Qt.WA_NoMousePropagation)
         self.Figure_3D_box.setObjectName("Figure_3D_box")
         self.Figure_3D_box.addItems(("Figure_3D", "Prism", "Parallelepiped", "Cube", "Pyramid", "Cylinder", "Cone",
                                      "Sphere"))
