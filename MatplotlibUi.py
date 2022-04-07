@@ -135,12 +135,14 @@ class Ui_MatplotlibWindow(object):
         self.label_2_input.setGeometry(QtCore.QRect(210, 590, 80, 30))
         self.label_2_input.setContextMenuPolicy(QtCore.Qt.NoContextMenu)
         self.label_2_input.setReadOnly(False)
+        self.label_2_input.setMaxLength(5)
         self.label_2_input.setObjectName("label_2_input")
 
         self.label_1_input = QtWidgets.QLineEdit(self.windowFrame)
         self.label_1_input.setGeometry(QtCore.QRect(210, 550, 80, 30))
         self.label_1_input.setContextMenuPolicy(QtCore.Qt.NoContextMenu)
         self.label_1_input.setReadOnly(False)
+        self.label_1_input.setMaxLength(5)
         self.label_1_input.setObjectName("label_1_input")
 
         self.label_3_input = QtWidgets.QLineEdit(self.windowFrame)

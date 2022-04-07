@@ -806,6 +806,7 @@ f"font: 9pt 'Segoe Print'"
 "color: rgb(255, 255, 255);\n"
 "border: 3px solid rgb(90, 1, 1);\n"
 "selection-background-color: rgba(129, 0, 0, 50);\n"
+"font: 12pt \"Segoe Print\";"
 "")
         self.plainTextEdit_page2_about_result.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.plainTextEdit_page2_about_result.setFrameShadow(QtWidgets.QFrame.Plain)
@@ -815,23 +816,15 @@ f"font: 9pt 'Segoe Print'"
         self.Description = QtWidgets.QWidget()
         self.Description.setStyleSheet("QWidget {\n"
 "background-color: rgba(255, 255, 255, 0);\n"
+
 "}")
         self.Description.setObjectName("Description")
         self.text_descriptions = QtWidgets.QTextBrowser(self.Description)
         self.text_descriptions.setGeometry(QtCore.QRect(10, 20, 361, 441))
-        '''font = QtGui.QFont()
-        font.setFamily("Segoe Print")
-        font.setPointSize(12)
-        font.setBold(False)
-        font.setItalic(False)
-        font.setWeight(50)
-        self.text_descriptions.setFont(font)'''
         self.text_descriptions.setContextMenuPolicy(QtCore.Qt.NoContextMenu)
         self.text_descriptions.setStyleSheet("QTextBrowser {\n"
 "color: rgb(255, 255, 255);\n"
 "background-color: rgba(127, 0, 0, 50);\n"
-"font: 12pt \"Segoe Print\";\n"
-"\n"
 "}\n"
 "")
         self.text_descriptions.setFrameShape(QtWidgets.QFrame.WinPanel)
@@ -909,6 +902,9 @@ f"font: bold 18pt {self.fontName}"
                 (self.lineEdit_page2_line1, self.lineEdit_page2_line2),
                 (self.lineEdit_page2_line1_out, self.lineEdit_page2_line2_out)
         )
+
+        self.lineEdit_page2_line1_out.setStyleSheet(f"font: bold 13pt {self.fontName}")
+        self.lineEdit_page2_line2_out.setStyleSheet(f"font: bold 13pt {self.fontName}")
 
         # Добавляем валидатор для всех полей ввода и устанавливаем макс длинну в 12 цифр. Добавляем курсор в виде пальца
         for item in self.page1_lines[1]:

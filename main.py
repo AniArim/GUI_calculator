@@ -18,7 +18,6 @@ except ImportError:
     pass
 
 app = QtWidgets.QApplication(sys.argv)
-
 app.setWindowIcon(QtGui.QIcon(f'{Path.cwd()/"images"/"icon.png"}'))
 
 ui = RootWindow()

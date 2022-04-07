@@ -21,6 +21,7 @@ class MatplotlibWidget(QtWidgets.QWidget):
         pyplot.close()  # чтобы не возникали ошибки накладывания осей при повторном вызове.
                         # Чтобы не было ошибки C/C++ с FigureCanvasQTAgg
         self.figure_draw = pyplot.gcf()
+        self.figure_draw.clear()
         self.figure_draw.set_facecolor("#e3e3e3")
         self.canvas = FigureCanvasQTAgg(self.figure_draw)
         self.axes = self.figure_draw.add_subplot(111)
