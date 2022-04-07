@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>715</width>
-    <height>224</height>
+    <height>390</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -48,6 +48,11 @@ QPushButton:pressed {
 background-color: qlineargradient(spread:reflect, x1:1, y1:0.522, x2:1, y2:0, stop:0 rgba(58, 4, 0, 240), stop:0.80597 rgba(161, 100, 100, 218));
 padding-top: 2px;
 padding-left: 3px;
+}
+QPlainTextEdit {
+padding: 5px 20px;
+color: rgb(255, 8, 0);
+font: 10pt &quot;Segoe Print&quot;;
 }
 
 
@@ -246,44 +251,50 @@ border: 1px
     <property name="readOnly">
      <bool>true</bool>
     </property>
+    <property name="plainText">
+     <string>Пустые поля, что искать то будем?</string>
+    </property>
    </widget>
    <widget class="QPlainTextEdit" name="plainTextEdit_6">
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>230</y>
-      <width>671</width>
-      <height>141</height>
+      <y>180</y>
+      <width>670</width>
+      <height>140</height>
      </rect>
     </property>
     <property name="readOnly">
      <bool>true</bool>
     </property>
-   </widget>
-   <widget class="QPushButton" name="btn_details">
-    <property name="geometry">
-     <rect>
-      <x>550</x>
-      <y>180</y>
-      <width>130</width>
-      <height>30</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Детали</string>
+    <property name="plainText">
+     <string>Тут могли бы быть функции...</string>
     </property>
    </widget>
    <widget class="QPushButton" name="btn_ok">
     <property name="geometry">
      <rect>
-      <x>410</x>
-      <y>180</y>
+      <x>420</x>
+      <y>340</y>
       <width>130</width>
       <height>30</height>
      </rect>
     </property>
     <property name="text">
      <string>OK</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btn_details">
+    <property name="geometry">
+     <rect>
+      <x>560</x>
+      <y>340</y>
+      <width>130</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Детали</string>
     </property>
    </widget>
   </widget>

@@ -39,12 +39,23 @@ class PlotWindow(QtWidgets.QDialog, Ui_MatplotlibWindow):
         self.setWindowIcon(QtGui.QIcon(f"{Path.cwd()/'images'/'icon.png'}"))
         self.switch = False
 
+        self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
+        self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
+        self.setMouseTracking(True)
+        self.setAttribute(QtCore.Qt.WA_DeleteOnClose)
+
+        self.cursorPosition = self.cursor().pos()
+        self.windowPosition = self.pos()
+
     def add_functions(self):
         self.label_1_input.textChanged.connect(lambda: self.lines_got_text(self.label_1_input.text(), self.label_1_input))
         self.label_2_input.textChanged.connect(lambda: self.lines_got_text(self.label_2_input.text(), self.label_2_input))
         self.init_widget()
         self.pushButton_go.clicked.connect(self.plot_widget)
         self.pushButton_save.clicked.connect(self.save_image)
+
+        self.closeWindowButton.clicked.connect(self.closeWindow)
+        self.minimizeWindowButton.clicked.connect(self.minimizeWindow)
 
     def lines_got_text(self, text: str, line: QtWidgets.QLineEdit):
         """
@@ -195,5 +206,28 @@ class PlotWindow(QtWidgets.QDialog, Ui_MatplotlibWindow):
                 self.filename, dpi=1000, transparent=True, bbox_inches='tight')  # сохранение изображения в файл
         else:
             pass
-    
+
+    def mousePressEvent(self, event):
+        self.cursorPosition = event.pos()
+        if event.button == QtCore.Qt.LeftButton:
+            self.windowPosition = event.pos()
+            event.accept()
+
+    def mouseReleaseEvent(self, event):
+        if event.button() == QtCore.Qt.LeftButton:
+            self.windowPosition = event.pos()
+
+    def mouseMoveEvent(self, event):
+        try:
+            delta = event.pos() - self.cursorPosition
+            self.move(self.pos() + delta)
+        except TypeError:
+            return
+
+    def closeWindow(self):
+        self.close()
+        self.destroy()
+
+    def minimizeWindow(self):
+        self.showMinimized()
     
