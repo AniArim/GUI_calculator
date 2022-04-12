@@ -4,6 +4,7 @@ import decimal
 from decimal import Decimal
 from ErrorWindow import ErrorDialog
 from EnumModule import *
+import typing
 
 
 class Figure_2D:
@@ -38,10 +39,10 @@ class Rectangle(Figure_2D):
         self.sideB = self.get_value_from_data_input_line(2) or None
         self.side = self.sideA or self.sideB
 
-    def get_value_from_data_input_line(self, lineIndex):
+    def get_value_from_data_input_line(self, lineIndex: int) -> float:
         return self.data_input.get(f"lineEdit_page1_line{lineIndex}_input")
 
-    def result(self):
+    def result(self) -> False:
         """
         Метод рассчитывает результат в зависимости от входных данных (что ищем, введенных параметров, и функции).
         Проверяет углы на величину 180 градусов.
