@@ -18,7 +18,7 @@ class MatplotlibWidget(QtWidgets.QWidget):
     def __init__(self, parent=None):
         super(MatplotlibWidget, self).__init__(parent)
 
-        pyplot.close()  # чтобы не возникали ошибки накладывания осей при повторном вызове.
+        pyplot.cla()  # чтобы не возникали ошибки накладывания осей при повторном вызове.
                         # Чтобы не было ошибки C/C++ с FigureCanvasQTAgg
         self.figure_draw = pyplot.gcf()
         self.figure_draw.clear()
@@ -85,6 +85,7 @@ class PlotWindow(QtWidgets.QDialog, Ui_MatplotlibWindow):
         self.widget = MatplotlibWidget()
         self.layoutvertical = QtWidgets.QVBoxLayout(self.widget_plot)
         self.layoutvertical.addWidget(self.widget)
+
         
     def plot_rectangle(self):
         """

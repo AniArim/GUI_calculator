@@ -2,6 +2,7 @@
 from pathlib import Path
 
 from PyQt5 import QtGui, QtWidgets, QtCore
+from typing import Union, TypeVar
 
 from EnumModule import *
 from ErrorWindow import ErrorDialog
@@ -24,8 +25,9 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.windowPosition = self.pos()
 
         self.setWindowIcon(QtGui.QIcon(f"{Path.cwd() / 'images' / 'icon.png'}"))
+
         self.html = ""
-        self.titles_for_parameters_in_lines_page1 = {
+        self.titles_for_parameters_in_lines_page1: dict[FigureNames, dict[RectangleWhatsearchVariant, Union[str, tuple[str]]]] = {
             FigureNames.rectangle.value: {
                 RectangleWhatsearchVariant.whatsearch.value: "",
                 RectangleWhatsearchVariant.sides.value: ("Сторона", "Диаметр", "Диагональ", "Площадь", "Периметр", "Угол α", "Угол β"),
@@ -107,14 +109,14 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.paint_figure.clicked.connect(lambda: self.show_matplotlib_window(self.figure))
         self.Calculate.clicked.connect(self.calculate_result)
 
-    def add_html_text(self, name: str):
+    def add_html_text(self, name: str) -> None:
         """
         Метод считывает разметку и текст из файла name.txt и добавляет в self.text_descriptions
         
         :param name: название файла без расширения с разметкой HTML в директории text_HTML
         :return: None
         """
-        path_file = Path.cwd()/'text_HTML'/f'{name}.txt'
+        path_file: Path = Path.cwd()/'text_HTML'/f'{name}.txt'
         try:
             with open(f"{path_file}", "r", encoding="utf-8") as file:
                 for line in file:
@@ -124,7 +126,7 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         except IOError:
             print("Exception: нет соответствия имени файла")
 
-    def switched(self, text: str):
+    def switched(self, text: str) -> None:
         """
         Метод переключения страниц объекта self.stackedWidget_func
         
@@ -147,7 +149,7 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             elif index == 2:
                 self.stackedWidget_func.setCurrentIndex(0)
 
-    def clear_lines(self, args):
+    def clear_lines(self, args: Union[list, tuple]) -> None:
         """
         Рекурсивный метод очистки входных данных.
         
@@ -158,10 +160,10 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             if isinstance(args[index], (tuple, list)):
                 self.clear_lines(args[index])
             else:
-                for i in args:
-                    i.setText(self._translate("MainWindow", ""))
+                for qLineEdit in args:
+                    qLineEdit.setText(self._translate("MainWindow", ""))
 
-    def setText_setVisibility_to_page1_lines(self, enum_key: int):
+    def setText_setVisibility_to_page1_lines(self, enum_key: RectangleWhatsearchVariant) -> None:
         """
         Установка текста в полях. Отображение видимости для всех полей страницы Input.
 
@@ -170,7 +172,10 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         """
         index = 0
         # кортеж из текстов, который мы будем отображать в полях параметров возможных  для поиска.
-        titles = self.titles_for_parameters_in_lines_page1.get(self.figure).get(enum_key)
+        try:
+            titles: Union[str, tuple[str]] = self.titles_for_parameters_in_lines_page1.get(self.figure).get(enum_key)
+        except:
+            raise TypeError("Фигура не найдена!")
 
         for title in titles:
             self.page1_lines[0][index].setText(title)  # добавляем текст в поля. Итерация по кортежу полей
@@ -178,7 +183,7 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         # отображение или скрытие для всех полей в зависимости от наличия текста в поле параметров возможных для поиска
         for index, line in enumerate(self.page1_lines[0]):
-            equal_line_input = self.page1_lines[1][index]
+            equal_line_input: QtWidgets.QLineEdit = self.page1_lines[1][index]
 
             if not line.text():
                 line.setEnabled(False)
@@ -190,11 +195,10 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 equal_line_input.setEnabled(True)
                 equal_line_input.setHidden(False)
 
-    def box_whatsearch_clicked(self):
+    def box_whatsearch_clicked(self) -> None:
         """
         Обработка событий в Box_whatsearch
 
-        :return:  None
         """
 
         if self.Box_whatsearch.currentIndex() == RectangleWhatsearchVariant.whatsearch.value:
@@ -233,19 +237,18 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             else:
                 pass
 
-    def updateQComboBoxFigure(self, box_object: QtWidgets.QComboBox):
+    def updateQComboBoxFigure(self, box_object: QtWidgets.QComboBox) -> None:
         """
         Обработка событий после нажатия на self.Figure2D_box или self.Figure3d_box
-        
-        :return: None
         """
+        typeVarStr = TypeVar("typeVarStr", bound=str)
         # на странице Input и Output текст "Выберите фигуру" меняем на название фигуры
         self.plainTextEdit_figure_input.setPlainText(box_object.currentText())
         self.plainTextEdit_figure_output.setPlainText(box_object.currentText())
 
-        self.figure = self.plainTextEdit_figure_input.toPlainText() or None  # фигура с которой будем работать
+        self.figure: typeVarStr = self.plainTextEdit_figure_input.toPlainText()  # фигура с которой будем работать
         # Создаем словарь в котором обновляем данные после ввода пользователем в lines_got_text(self, text, line)
-        self.data_figure_values_input = {self.figure: {}}
+        self.data_figure_values_input: dict[str, dict[str, float]] = {self.figure: {}}
         self.html = ""  # Сбрасываем текст в описании свойств
         self.text_descriptions.setHtml(self._translate("MainWindow", f"{self.html}"))
 
@@ -261,10 +264,10 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.func_figure(box_object.currentText())
             self.update_image()
 
-            file_name = FigureNames(FigureNames.keyForValue(self.figure)).name  # Получаем из сабкласса Enum имя по значению
+            file_name: str = FigureNames(FigureNames.keyForValue(self.figure)).name  # Получаем из сабкласса Enum имя по значению
             self.add_html_text(file_name)
 
-    def func_figure(self, figure: str):
+    def func_figure(self, figure: str) -> None:
         """
         Для фигуры добавляем в Box_whatsearch поля и текст. Если фигура None поля удаляются, устанавливается текст по умолчанию.
 
@@ -274,16 +277,16 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         if figure == FigureNames.rectangle.value:
             self.Box_whatsearch.clear()
 
-            for id, element in enumerate(RectangleWhatsearchVariant):
-                self.Box_whatsearch.addItem(element.name)
-                self.Box_whatsearch.setItemText(id, self._translate("MainWindow", element.text))
+            for ids, enumeration in enumerate(RectangleWhatsearchVariant):
+                self.Box_whatsearch.addItem(enumeration.name)
+                self.Box_whatsearch.setItemText(ids, self._translate("MainWindow", enumeration.text))
 
         else:
             self.Box_whatsearch.clear()
             self.Box_whatsearch.addItem(f"{RectangleWhatsearchVariant.whatsearch.text}")
             self.Box_whatsearch.setItemText(0, self._translate("MainWindow", RectangleWhatsearchVariant.whatsearch.text))
 
-    def lines_got_text(self, text: str, line: QtWidgets.QLineEdit):
+    def lines_got_text(self, text: str, line: QtWidgets.QLineEdit) -> None:
         """
         Метод дополнительной валидации всего вводимого текста, очистка полей для вывода результата.
 
@@ -311,9 +314,9 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             except KeyError:
                 pass
 
-    def calculate_result(self):
+    def calculate_result(self) -> None:
         """
-        Если поле для ввода активно вызывается метод рассчетов.
+        Если поле для ввода активно вызывается метод расчетов.
 
         :return: None
         """
@@ -322,29 +325,28 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         else:
             self.make_calculations()
 
-    def page2_line1_placement(self, functionVariant: enum.Enum):
+    def page2_line1_placement(self, functionVariant: "RectangleParentFormulas") -> None:
         """
         Когда для вывода будет только один результат.
         Создание экземпляра дочернего класса Figure_2D. Получение результата по формуле, в зависимости от параметров.
         Добавление результата в текстовое поле на странице Output.
         """
-
-        self.result = Rectangle(self.Box_whatsearch.currentIndex(),
-                                self.data_figure_values_input.get(self.figure), functionVariant)
+        self.result: "Rectangle" = Rectangle(self.Box_whatsearch.currentIndex(),
+                                             self.data_figure_values_input.get(self.figure), functionVariant)
         if self.result.result():
             self.lineEdit_page2_line1_out.setText(f"{self.result.result()}")
             self.plainTextEdit_page2_about_result.setPlainText(functionVariant.text)
         else:
             return
 
-    def page2_two_lines_placement(self, functionVariant: enum.Enum):
+    def page2_two_lines_placement(self, functionVariant: "RectangleParentFormulas"):
         """
         Когда для вывода будет два результата.
         Создание экземпляра дочернего класса Figure_2D. Получение результата по формуле, в зависимости от параметров.
         Добавление результата в текстовое поле на странице Output
         """
-        self.result = Rectangle(self.Box_whatsearch.currentIndex(),
-                                self.data_figure_values_input.get(self.figure), functionVariant)
+        self.result: "Rectangle" = Rectangle(self.Box_whatsearch.currentIndex(),
+                                             self.data_figure_values_input.get(self.figure), functionVariant)
 
         if self.result.result():
             self.sideA, self.sideB = self.result.result()
@@ -359,14 +361,14 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         else:
             return
 
-    def check_page1_input_for_line(self, lineIndex: int):
+    def check_page1_input_for_line(self, lineIndex: int) -> float:
         return self.temp_values.get(f'lineEdit_page1_line{lineIndex}_input')
 
-    def check_page1_inputs_for_lines(self, firstLineIndex: int, secondLineIndex: int):
+    def check_page1_inputs_for_lines(self, firstLineIndex: int, secondLineIndex: int) -> Union[float]:
         return self.temp_values.get(f'lineEdit_page1_line{firstLineIndex}_input') \
                and self.temp_values.get(f'lineEdit_page1_line{secondLineIndex}_input')
 
-    def check_page1_inputs_for_line_or_line(self, firstLineIndex: int, secondLineIndex: int):
+    def check_page1_inputs_for_line_or_line(self, firstLineIndex: int, secondLineIndex: int) -> float:
         return self.temp_values.get(f'lineEdit_page1_line{firstLineIndex}_input') \
                or self.temp_values.get(f'lineEdit_page1_line{secondLineIndex}_input')
 
@@ -405,10 +407,10 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                         else:
                             self.error_message_show(text="Неправильно введены данные! Смотри детали",
                                                     details="Формулы стороны прямоугольника (длины и ширины прямоугольника) через:\n"
-                                                             " 1.Диагональ и другую сторону\n"
-                                                             "2. Площадь и другую сторону\n"
-                                                             "3. Периметр и другую сторону\n"
-                                                             "4-5. Через диаметр и угол α или угол β")
+                                                    " 1.Диагональ и другую сторону\n"
+                                                    "2. Площадь и другую сторону\n"
+                                                    "3. Периметр и другую сторону\n"
+                                                    "4-5. Через диаметр и угол α или угол β")
                             return
                             
                     elif self.Box_whatsearch.currentIndex() == RectangleWhatsearchVariant.diagonal.value:
@@ -438,13 +440,13 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                         else:
                             self.error_message_show(text="Неправильно введены данные! Смотри детали",
                                                     details="Формула диагонали прямоугольника через:\n"
-                                                                " 1.Две стороны прямоугольника (через теорему Пифагора)\n"
-                                                                "2. Площадь и любую сторону\n"
-                                                                "3. Периметр и любую сторону\n"
-                                                                "4. Радиус/диаметр описанной окружности\n"
-                                                                "5. Синус угла, прилегающего к диагонали, и длину стороны противоположной этому углу\n"
-                                                                "6. Косинус угла, прилегающего к диагонали, и длину стороны прилегающей к этому углу\n"
-                                                                "7. Синус острого угла между диагоналями и площадью прямоугольника")
+                                                    " 1.Две стороны прямоугольника (через теорему Пифагора)\n"
+                                                    "2. Площадь и любую сторону\n"
+                                                    "3. Периметр и любую сторону\n"
+                                                    "4. Радиус/диаметр описанной окружности\n"
+                                                    "5. Синус угла, прилегающего к диагонали, и длину стороны противоположной этому углу\n"
+                                                    "6. Косинус угла, прилегающего к диагонали, и длину стороны прилегающей к этому углу\n"
+                                                    "7. Синус острого угла между диагоналями и площадью прямоугольника")
                             return
                         
                     elif self.Box_whatsearch.currentIndex() == RectangleWhatsearchVariant.perimeter.value:  # Периметр
@@ -492,11 +494,11 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                         else:
                             self.error_message_show(text="Неправильно введены данные! Смотри детали",
                                                     details="Формула площади прямоугольника через:\n"
-                                                                "1.Две стороны прямоугольника\n"
-                                                                "2. Периметр и любую сторону\n"
-                                                                "3. Диагональ и любую сторону\n"
-                                                                "4. Диагональ и синус острого угла между диагоналями\n"
-                                                                "5. Радиус/диаметр описанной окружности и любую сторону\n")
+                                                    "1.Две стороны прямоугольника\n"
+                                                    "2. Периметр и любую сторону\n"
+                                                    "3. Диагональ и любую сторону\n"
+                                                    "4. Диагональ и синус острого угла между диагоналями\n"
+                                                    "5. Радиус/диаметр описанной окружности и любую сторону\n")
                             return
                             
                     elif self.Box_whatsearch.currentIndex() == RectangleWhatsearchVariant.radius.value:  # Окружность описанная вокруг
@@ -526,13 +528,13 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                         else:
                             self.error_message_show(text="Неправильно введены данные! Смотри детали",
                                                     details="Формула радиуса окружности описанной вокруг прямоугольника через:\n"
-                                                                "1.Две стороны прямоугольника\n"
-                                                                "2. Периметр и любую сторону\n"
-                                                                "3. Площадь и любую сторону\n"
-                                                                "4. Диагональ\n"
-                                                                "5. Синус угла, прилегающего к диагонали, и длину стороны противоположной этому углу\n"
-                                                                "6. Косинус угла, прилегающего к диагонали, и длину стороны прилегающей к этому углу\n"
-                                                                "7. Синус острого угла между диагоналями и площадью прямоугольника\n")
+                                                    "1.Две стороны прямоугольника\n"
+                                                    "2. Периметр и любую сторону\n"
+                                                    "3. Площадь и любую сторону\n"
+                                                    "4. Диагональ\n"
+                                                    "5. Синус угла, прилегающего к диагонали, и длину стороны противоположной этому углу\n"
+                                                    "6. Косинус угла, прилегающего к диагонали, и длину стороны прилегающей к этому углу\n"
+                                                    "7. Синус острого угла между диагоналями и площадью прямоугольника\n")
                             return
                             
                     elif self.Box_whatsearch.currentIndex() == RectangleWhatsearchVariant.angleA.value:  # Угол между стороной и диагональю прямоугольника
@@ -569,7 +571,7 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
                     return self.show_lineEdit_page2_line(1), self.stackedWidget_func.setCurrentIndex(1)
     
-    def show_lineEdit_page2_line(self, line: int):
+    def show_lineEdit_page2_line(self, line: int) -> None:
         """
         :param line: номер поля
         :return: None
@@ -581,7 +583,7 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.lineEdit_page2_line2.setHidden(False)
             self.lineEdit_page2_line2_out.setHidden(False)
     
-    def hide_lineEdit_page2_line(self, line: int):
+    def hide_lineEdit_page2_line(self, line: int) -> None:
         """
         :param line: номер поля
         :return: None
@@ -599,9 +601,6 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         ui = ErrorDialog(text=text, details=details)
         ui.setupUi(ui)
         ui.show()
-        
-        '''ui.btn_ok.clicked.connect(lambda: ui.btn_clicked(ui.btn_ok.text(), ui))
-        ui.btn_details.clicked.connect(lambda: ui.btn_clicked(ui.btn_details.text(), ui))'''
 
     @staticmethod
     def show_matplotlib_window(fig: str):
@@ -610,11 +609,11 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         ui.setupUi(ui)
         ui.show()
 
-    def update_image(self):
+    def update_image(self) -> None:
         """
         Очищаем виджет с изображением в левой части окна. Добавляет изображение для выбранной фигуры
         """
-        file_name = FigureNames(FigureNames.keyForValue(self.figure)).name
+        file_name: str = FigureNames(FigureNames.keyForValue(self.figure)).name
         path = Path.cwd()/'images'/'figures'/file_name
         self.label_image.clear()
         self.label_image.setPixmap(QtGui.QPixmap(f"{path}"))
@@ -642,6 +641,3 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def minimizeWindow(self):
         self.showMinimized()
-        
-
-
