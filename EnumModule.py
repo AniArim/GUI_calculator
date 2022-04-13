@@ -1,3 +1,4 @@
+
 import enum
 
 
@@ -24,7 +25,7 @@ class FigureNames(enum.Enum):
         pass
 
     @classmethod
-    def keyForValue(cls, figure: str):
+    def keyForValue(cls, figure: str) -> "FigureNames":
         data = tuple(cls)
         for object_ in data:
             if object_.value == figure:
@@ -45,7 +46,7 @@ class RectangleWhatsearchVariant(enum.Enum):
         pass
 
     @staticmethod
-    def names():
+    def names() -> tuple:
         return (
             "Что нужно найти?",
             "Стороны",
@@ -58,7 +59,7 @@ class RectangleWhatsearchVariant(enum.Enum):
         )
 
     @property
-    def text(self):
+    def text(self) -> str:
         return self.names()[self.value]
 
 
@@ -68,11 +69,11 @@ class RectangleParentFormulas(enum.Enum):
         pass
 
     @staticmethod
-    def names():
+    def names() -> tuple:
         return ()
 
     @property
-    def text(self):
+    def text(self) -> str:
         return self.names()[self.value]
 
 
@@ -85,7 +86,7 @@ class RectangleSidesFormulas(RectangleParentFormulas):
     diameterAndAngleB = 4  # "через диаметр и угол β"
 
     @staticmethod
-    def names():
+    def names() -> tuple:
         return (
             "Через диагональ и сторону",
             "через площадь и другую сторону",
@@ -106,7 +107,7 @@ class RectangleDiagFormulas(RectangleParentFormulas):
     angleBAndSquare = 6  # "Через синус острого угла 'β' между диагоналями и площадью прямоугольника"
 
     @staticmethod
-    def names():
+    def names() -> tuple:
         return (
             "Через теорему Пифагора",
             "Через площадь и другую сторону",
@@ -126,7 +127,7 @@ class RectanglePerimeterFormulas(RectangleParentFormulas):
     radiusAndSide = 3  # "Через радиус описанной окружности и любую сторону"
 
     @staticmethod
-    def names():
+    def names() -> tuple:
         return (
             "Через две стороны прямоугольника",
             "Через площадь и другую сторону",
@@ -144,7 +145,7 @@ class RectangleSquareFormulas(RectangleParentFormulas):
     radiusAndSide = 4  # "Через радиус и любую сторону"
 
     @staticmethod
-    def names():
+    def names() -> tuple:
         return (
             "Через две стороны прямоугольника",
             "Через периметр и любую сторону",
@@ -165,7 +166,7 @@ class RectangleRadiusFormulas(RectangleParentFormulas):
     angleBAndSquare = 6  # "Через синус острого угла между диагоналями 'β' и площадью прямоугольника"
 
     @staticmethod
-    def names():
+    def names() -> tuple:
         return (
             "Через две стороны прямоугольника",
             "Через периметр и любую сторону",
@@ -183,7 +184,7 @@ class RectangleAngleAFormulas(RectangleParentFormulas):
     angleB = 1   # "Через угол между диагоналями 'β'"
 
     @staticmethod
-    def names():
+    def names() -> tuple:
         return (
             "Через диагональ и любую сторону",
             "Через угол между диагоналями 'β'",
@@ -196,12 +197,8 @@ class RectangleAngleBFormulas(RectangleParentFormulas):
     squareAndDiagonal = 1  # "через площадь и диагональ"
 
     @staticmethod
-    def names():
+    def names() -> tuple:
         return (
             "Через угол 'α' между стороной и диагональю",
             "Через площадь и диагональ",
             )
-
-
-
-

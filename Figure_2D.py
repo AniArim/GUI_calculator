@@ -4,12 +4,12 @@ import decimal
 from decimal import Decimal
 from ErrorWindow import ErrorDialog
 from EnumModule import *
-import typing
+from typing import Union
 
 
 class Figure_2D:
     
-    def __init__(self, whatsearch: enum.Enum, data_input: dict, variant: enum.Enum):
+    def __init__(self, whatsearch: int, data_input: dict, variant: enum.Enum) -> None:
         self.data_input = data_input  # Словарь типа "lineEdit_page1_line1" : 56.2"
         self.whatsearch = whatsearch  # Индекс. по нему получаем список отображаемых полей
         self.variant = variant
@@ -32,7 +32,7 @@ class Figure_2D:
 
 class Rectangle(Figure_2D):
     
-    def __init__(self,  whatsearch: enum.Enum, data_input: dict, variant: enum.Enum):
+    def __init__(self,  whatsearch: int, data_input: dict, variant: enum.Enum):
         super().__init__(whatsearch, data_input, variant)
 
         self.sideA = self.get_value_from_data_input_line(1) or None
@@ -42,7 +42,7 @@ class Rectangle(Figure_2D):
     def get_value_from_data_input_line(self, lineIndex: int) -> float:
         return self.data_input.get(f"lineEdit_page1_line{lineIndex}_input")
 
-    def result(self) -> False:
+    def result(self) -> Union[Decimal, None, tuple[Decimal, Decimal]]:
         """
         Метод рассчитывает результат в зависимости от входных данных (что ищем, введенных параметров, и функции).
         Проверяет углы на величину 180 градусов.
@@ -77,7 +77,7 @@ class Rectangle(Figure_2D):
                         Decimal(f"{self.sideB}").quantize(Decimal('1.0'), decimal.ROUND_HALF_UP)
                 else:
                     self.error_show()
-                    return False
+                    return
 
             elif self.variant == RectangleSidesFormulas.diameterAndAngleB:
                 if self.get_value_from_data_input_line(3):
@@ -93,7 +93,7 @@ class Rectangle(Figure_2D):
                         Decimal(f"{self.sideB}").quantize(Decimal('1.0'), decimal.ROUND_HALF_UP)
                 else:
                     self.error_show()
-                    return False
+                    return
 
             return Decimal(f"{self.side_desired}").quantize(Decimal('1.0'), decimal.ROUND_HALF_UP)
         
@@ -120,7 +120,7 @@ class Rectangle(Figure_2D):
                     self.diagonal = self.sideA / (math.sin(math.radians(self.angleA)))
                 else:
                     self.error_show()
-                    return False
+                    return
 
             elif self.variant == RectangleDiagFormulas.angleAAndSideB:
                 if self.get_value_from_data_input_line(7) < 180:
@@ -128,7 +128,7 @@ class Rectangle(Figure_2D):
                     self.diagonal = self.sideB / (math.cos(math.radians(self.angleB)))
                 else:
                     self.error_show()
-                    return False
+                    return
 
             elif self.variant == RectangleDiagFormulas.angleBAndSquare:
                 if self.get_value_from_data_input_line(7) < 180:
@@ -137,7 +137,7 @@ class Rectangle(Figure_2D):
                     self.diagonal = math.sqrt((2 * self.square) / (math.sin(math.radians(self.angleB))))
                 else:
                     self.error_show()
-                    return False
+                    return
 
             return Decimal(f"{self.diagonal}").quantize(Decimal('1.0'), decimal.ROUND_HALF_UP)
         
@@ -182,7 +182,7 @@ class Rectangle(Figure_2D):
                     self.square = (self.diagonal ** 2 * math.sin(math.radians(self.angleB))) / 2
                 else:
                     self.error_show()
-                    return False
+                    return
 
             elif self.variant == RectangleSquareFormulas.radiusAndSide:
                 self.radius = self.get_value_from_data_input_line(4)
@@ -212,14 +212,14 @@ class Rectangle(Figure_2D):
                     self.angleA = self.get_value_from_data_input_line(6)
                     self.radius = self.sideA / (2 * math.sin(math.radians(self.angleA)))
                 else:
-                    return False
+                    return
 
             elif self.variant == RectangleRadiusFormulas.angleBAndSideA:
                 if self.get_value_from_data_input_line(7) < 180:
                     self.angleB = self.get_value_from_data_input_line(7)
                     self.radius = self.sideB / (2 * math.cos(math.radians(self.angleB)))
                 else:
-                    return False
+                    return
 
             elif self.variant == RectangleRadiusFormulas.angleBAndSquare:
                 if self.get_value_from_data_input_line(7) < 180:
@@ -227,7 +227,7 @@ class Rectangle(Figure_2D):
                     self.square = self.get_value_from_data_input_line(4)
                     self.radius = (math.sqrt((2 * self.square) / math.sin(math.radians(self.angleB)))) / 2
                 else:
-                    return False
+                    return
 
             return Decimal(f"{self.radius}").quantize(Decimal('1.0'), decimal.ROUND_HALF_UP)
         
@@ -246,7 +246,7 @@ class Rectangle(Figure_2D):
                     self.angleA = (self.angleB / 2)
                 else:
                     self.error_show()
-                    return False
+                    return
 
             return Decimal(f"{self.angleA}").quantize(Decimal('1'), decimal.ROUND_HALF_UP)
         
@@ -257,7 +257,7 @@ class Rectangle(Figure_2D):
                     self.angleB = (2 * self.angleA)
                 else:
                     self.error_show()
-                    return False
+                    return
 
             elif self.variant == RectangleAngleBFormulas.squareAndDiagonal:
                 self.square = self.get_value_from_data_input_line(1)
