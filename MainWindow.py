@@ -2,7 +2,7 @@
 from pathlib import Path
 
 from PyQt5 import QtGui, QtWidgets, QtCore
-from typing import Union, TypeVar
+from typing import Union, TypeVar, Tuple
 
 from EnumModule import *
 from ErrorWindow import ErrorDialog
@@ -27,7 +27,7 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.setWindowIcon(QtGui.QIcon(f"{Path.cwd() / 'images' / 'icon.png'}"))
 
         self.html = ""
-        self.titles_for_parameters_in_lines_page1: dict[FigureNames, dict[RectangleWhatsearchVariant, Union[str, tuple[str]]]] = {
+        self.titles_for_parameters_in_lines_page1: dict[str, dict[str, Union[str, Tuple[str, ...]]]] = {
             FigureNames.rectangle.value: {
                 RectangleWhatsearchVariant.whatsearch.value: "",
                 RectangleWhatsearchVariant.sides.value: ("Сторона", "Диаметр", "Диагональ", "Площадь", "Периметр", "Угол α", "Угол β"),
@@ -163,7 +163,7 @@ class RootWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 for qLineEdit in args:
                     qLineEdit.setText(self._translate("MainWindow", ""))
 
-    def setText_setVisibility_to_page1_lines(self, enum_key: RectangleWhatsearchVariant) -> None:
+    def setText_setVisibility_to_page1_lines(self, enum_key: str) -> None:
         """
         Установка текста в полях. Отображение видимости для всех полей страницы Input.
 

@@ -9,6 +9,8 @@
 
 
 from pathlib import Path
+from typing import Union, Tuple
+
 from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.QtCore import QLocale, Qt
 from PyQt5.QtGui import QDoubleValidator
@@ -888,7 +890,7 @@ f"font: bold 18pt {self.fontName}"
         MainWindow.setCentralWidget(self.centralwidget)
 
         # кортеж из всех полей ввода на первой странице
-        self.page1_lines = (
+        self.page1_lines: Tuple[Tuple[QtWidgets.QLineEdit, ...], ...] = (
                 (self.lineEdit_page1_line1, self.lineEdit_page1_line2, self.lineEdit_page1_line3,
                  self.lineEdit_page1_line4,
                  self.lineEdit_page1_line5, self.lineEdit_page1_line6, self.lineEdit_page1_line7),
@@ -898,7 +900,7 @@ f"font: bold 18pt {self.fontName}"
                  self.lineEdit_page1_line7_input)
         )
 
-        self.page2_lines = (
+        self.page2_lines: Tuple[Tuple[QtWidgets.QLineEdit, ...], ...] = (
                 (self.lineEdit_page2_line1, self.lineEdit_page2_line2),
                 (self.lineEdit_page2_line1_out, self.lineEdit_page2_line2_out)
         )

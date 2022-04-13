@@ -1,3 +1,4 @@
+from typing import Union
 
 import matplotlib.pyplot as pyplot
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
@@ -5,7 +6,7 @@ from pathlib import Path
 import numpy as np
 import math
 
-from Figure_2D import Rectangle as Rect
+from Figure_2D import Rectangle as rectangle
 from EnumModule import *
 from MatplotlibUi import Ui_MatplotlibWindow
 
@@ -34,8 +35,8 @@ class PlotWindow(QtWidgets.QDialog, Ui_MatplotlibWindow):
     def __init__(self, parent=None, figure=None):
         super(PlotWindow, self).__init__(parent)
 
-        self.figure = figure
-        self.data_input = {self.figure: {}}
+        self.figure: str = figure
+        self.data_input: dict[str, dict[str, float]] = {self.figure: {}}
         self.setAttribute(QtCore.Qt.WA_DeleteOnClose, True)  # устанавливаем флаг чтобы удалять окно после закрытия
         self.setWindowIcon(QtGui.QIcon(f"{Path.cwd()/'images'/'icon.png'}"))
         self.switch = False
@@ -85,7 +86,6 @@ class PlotWindow(QtWidgets.QDialog, Ui_MatplotlibWindow):
         self.widget = MatplotlibWidget()
         self.layoutvertical = QtWidgets.QVBoxLayout(self.widget_plot)
         self.layoutvertical.addWidget(self.widget)
-
         
     def plot_rectangle(self):
         """
@@ -97,7 +97,7 @@ class PlotWindow(QtWidgets.QDialog, Ui_MatplotlibWindow):
         i = ((-self.radius + self.heigth / 2) - (0.5 * self.scaling_)) / 2
         
         self.widget.figure_draw.suptitle(self.figure)  # Название фигуры
-        self.widget.axes.axis("equal")  # чтобы круг был кругом, а не элипсом
+        self.widget.axes.axis("equal")  # чтобы круг был кругом, а не эллипсом
         self.widget.axes.set(ylim=((-self.radius+self.heigth/2) - math.fabs(i), self.diagonal))  # граничные значения
         self.widget.axes.xaxis.set_major_locator(
             FixedLocator([0, self.weight, self.weight/2]))  # точки: ноль, ширина, центр круга х == радиус точка х
@@ -134,10 +134,10 @@ class PlotWindow(QtWidgets.QDialog, Ui_MatplotlibWindow):
         self.widget.axes.set_facecolor("#e3e3e3")
         self.widget.axes.grid()
         
-    def scaling(self, number_x: (int, float), number_y: (int, float)):
+    def scaling(self, number_x: Union[int, float], number_y: Union[int, float]) -> int:
         """
         Для корректного масштабирования осей и букв на рисунке  необходимо знать количество десятков во входных данных.
-        Возвращаем максимальное значение - цифру для умножения при рассчете масштабирования.
+        Возвращаем максимальное значение - цифру для умножения при расчете масштабирования.
         
         :param number_x: ширина из label_1_input
         :param number_y: высота из label_2_input
@@ -147,13 +147,14 @@ class PlotWindow(QtWidgets.QDialog, Ui_MatplotlibWindow):
         len_y = len(str(number_y).partition(".")[0])
         i = max(len_x, len_y)
         self.scaling_ = 1 if i <= 1 else 10 ** (i - 1)
+
         return self.scaling_
 
     def plot_widget(self):
         """
         Метод очищает axes для добавления фигуры по новым параметрам.
-        Производим рассчеты:  класса фигуры ( Rectangle для прямоугольника) из модуля Figure_2D.
-        Добавляет в plainTextEdit_result рассчеты по входным данным.
+        Производим расчеты:  класса фигуры ( Rectangle для прямоугольника) из модуля Figure_2D.
+        Добавляет в plainTextEdit_result расчеты по входным данным.
         Вызывает метод отрисовки фигуры.
         
         :return: None
@@ -173,9 +174,9 @@ class PlotWindow(QtWidgets.QDialog, Ui_MatplotlibWindow):
                     "lineEdit_page1_line1_input": self.heigth,
                     "lineEdit_page1_line2_input": self.weight
                     }
-                self.diag = Rect(RectangleWhatsearchVariant.diagonal.value, temp, RectangleDiagFormulas.pythagoras)
-                self.perimeter = Rect(RectangleWhatsearchVariant.perimeter.value, temp, RectanglePerimeterFormulas.sides)
-                self.square = Rect(RectangleWhatsearchVariant.square.value, temp, RectangleSquareFormulas.sides)
+                self.diag = rectangle(RectangleWhatsearchVariant.diagonal.value, temp, RectangleDiagFormulas.pythagoras)
+                self.perimeter = rectangle(RectangleWhatsearchVariant.perimeter.value, temp, RectanglePerimeterFormulas.sides)
+                self.square = rectangle(RectangleWhatsearchVariant.square.value, temp, RectangleSquareFormulas.sides)
 
                 self.diagonal = float(self.diag.result())
                 self.radius = self.diagonal/2
@@ -194,15 +195,13 @@ class PlotWindow(QtWidgets.QDialog, Ui_MatplotlibWindow):
     def save_image(self):
         """
         Метод генерирует путь к рабочему столу, сохраняет отрисованное изображение, если холст не пустой.
-        Изображение в формате png с прозрачным фоном и обрезаной рамкой.
+        Изображение в формате png с прозрачным фоном и обрезанной рамкой.
         
         :return: None
         """
         if self.switch:
-            self.filename, _ = QtWidgets.QFileDialog.getSaveFileName(self.widget_plot,
-                                    'Save File',
-                                    f"{Path.home()/'Desktop'}",
-                                    "Images (*.png)")
+            self.filename, _ = QtWidgets.QFileDialog.getSaveFileName(self.widget_plot, 'Save File',
+                                                                     f"{Path.home()/'Desktop'}", "Images (*.png)")
             
             self.widget.figure_draw.savefig(
                 self.filename, dpi=1000, transparent=True, bbox_inches='tight')  # сохранение изображения в файл
@@ -232,4 +231,3 @@ class PlotWindow(QtWidgets.QDialog, Ui_MatplotlibWindow):
 
     def minimizeWindow(self):
         self.showMinimized()
-    
