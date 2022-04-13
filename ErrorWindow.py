@@ -9,8 +9,8 @@ class ErrorDialog(QtWidgets.QMainWindow, Ui_ErrorWindow):
     def __init__(self, parent=None, text=None, details=None):
         super(ErrorDialog, self).__init__(parent)
 
-        self.text = text
-        self.details = details
+        self.text: str = text
+        self.details: str = details
         self.setMouseTracking(True)
         self.setAttribute(QtCore.Qt.WA_DeleteOnClose)
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
@@ -26,7 +26,7 @@ class ErrorDialog(QtWidgets.QMainWindow, Ui_ErrorWindow):
         self.closeWindowButton.clicked.connect(self.closeWindow)
         self.questionWindowButton.clicked.connect(lambda: self.btn_clicked(self.btn_details.text(), self))
 
-    def btn_clicked(self, name: QtWidgets.QPushButton.text, obj: QtWidgets.QMainWindow):
+    def btn_clicked(self, name: str, obj: QtWidgets.QMainWindow):
         """
         Обработка событий кнопок "ОК" и "Детали". Изменения текста кнопки и расширение/сворачивание окна.
 
@@ -72,4 +72,3 @@ class ErrorDialog(QtWidgets.QMainWindow, Ui_ErrorWindow):
     def closeWindow(self):
         self.close()
         self.destroy()
-
